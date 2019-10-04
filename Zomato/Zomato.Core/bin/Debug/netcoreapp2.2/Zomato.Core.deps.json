@@ -1,0 +1,49 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v2.2",
+    "signature": "da39a3ee5e6b4b0d3255bfef95601890afd80709"
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v2.2": {
+      "Zomato.Core/1.0.0": {
+        "dependencies": {
+          "Zomato.Repository": "1.0.0"
+        },
+        "runtime": {
+          "Zomato.Core.dll": {}
+        }
+      },
+      "Zomato.DomainModel/1.0.0": {
+        "runtime": {
+          "Zomato.DomainModel.dll": {}
+        }
+      },
+      "Zomato.Repository/1.0.0": {
+        "dependencies": {
+          "Zomato.DomainModel": "1.0.0"
+        },
+        "runtime": {
+          "Zomato.Repository.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Zomato.Core/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Zomato.DomainModel/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Zomato.Repository/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

@@ -1,25 +1,32 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
+using Zomato.DomainModel.Data;
 using Zomato.DomainModel.Models;
 
 namespace Zomato.Repository.CommentRepository
 {
     public class CommentRepository : ICommentRepository
     {
-        public Comment AddComment(Comment comment)
+        private ApplicationDbContext _db;
+
+        public CommentRepository(ApplicationDbContext db)
         {
-            throw new NotImplementedException();
+            _db = db;
         }
 
-        public List<Comment> GetCommentByReviewId(int reviewId)
+        public async Task<Comment> AddComment(Comment comment)
         {
-            throw new NotImplementedException();
+            await _db.Comment.AddAsync(comment);
+            return comment;
         }
 
-        public int GetCommentCountByReviewId(int reviewId)
+        public async Task<List<Comment>> GetCommentByReviewId(int reviewId)
         {
-            throw new NotImplementedException();
+            return await _db.Comment.Where(x => x.ReviewId == reviewId).ToListAsync();
         }
     }
 }

@@ -1,0 +1,10 @@
+<div mat-dialog-content>
+  <p>Addresses:</p>
+  <mat-form-field>
+    <input matInput type="text" [(ngModel)]="data.Address" placeholder="Add New Address" required>
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">No Thanks</button>
+  <button mat-button [mat-dialog-close]="data">Ok</button>
+</div>

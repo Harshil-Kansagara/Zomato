@@ -1,35 +1,57 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
+using Zomato.DomainModel.Data;
 using Zomato.DomainModel.Models;
 
 namespace Zomato.Repository.RestaurantRepository
 {
     public class RestaurantRepository : IRestaurantRepository
     {
-        public Restaurant AddRestaurant(Restaurant restaurant)
+        private readonly ApplicationDbContext _db;
+
+        public RestaurantRepository(ApplicationDbContext db)
+        {
+            _db = db;
+        }
+
+        public async Task<Restaurant> AddRestaurant(Restaurant restaurant)
+        {
+            await _db.Restaurant.AddAsync(restaurant);
+            return restaurant;
+        }
+
+        public async Task deleteRestaurant(int restaurantId)
+        {
+            var restaurant = await _db.Restaurant.FindAsync(restaurantId);
+            if(restaurant != null)
+            {
+                _db.Restaurant.Remove(restaurant);
+            }
+        }
+
+        public async Task<Restaurant> GetRestaurantById(int restaurantId)
+        {
+            return await _db.Restaurant.Where(x => x.RestaurantId == restaurantId).FirstAsync();
+        }
+
+        public async Task<string> GetRestaurantNameById(int restaurantId)
         {
             throw new NotImplementedException();
         }
 
-        public void deleteRestaurant(int restaurantId)
+        public async Task<List<Restaurant>> ListRestaurant()
         {
-            throw new NotImplementedException();
+            return await _db.Restaurant.ToListAsync();
         }
 
-        public Restaurant GetRestaurantById(int restaurantId)
+        public async Task<int> GetRestaurantIdByRestaurantName(string restaurantName)
         {
-            throw new NotImplementedException();
-        }
-
-        public string GetRestaurantNameById(int restaurantId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public List<Restaurant> ListRestaurant()
-        {
-            throw new NotImplementedException();
+            var restaurant= await _db.Restaurant.Where(x => x.RestaurantName == restaurantName).FirstOrDefaultAsync();
+            return restaurant.RestaurantId;
         }
     }
 }

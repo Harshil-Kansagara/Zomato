@@ -88,12 +88,12 @@ namespace Zomato.Repository.UnitofWork
 
         public int commit()
         {
-            throw new NotImplementedException();
+            return _applicationDbContext.SaveChanges();
         }
 
         public void Dispose()
         {
-            throw new NotImplementedException();
+            _applicationDbContext.Dispose();
         }
     }
 }

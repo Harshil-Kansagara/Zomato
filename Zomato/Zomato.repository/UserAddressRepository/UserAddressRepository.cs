@@ -1,25 +1,37 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
+using Zomato.DomainModel.Data;
 using Zomato.DomainModel.Models;
 
 namespace Zomato.Repository.UserAddressRepository
 {
     public class UserAddressRepository : IUserAddressRepository
     {
-        public UserAddress AddAddress(UserAddress userAddress)
+        private readonly ApplicationDbContext _db;
+
+        public UserAddressRepository(ApplicationDbContext db)
+        {
+            _db = db;
+        }
+
+        public async Task<UserAddress> AddAddress(UserAddress userAddress)
+        {
+            await _db.UserAddress.AddAsync(userAddress);
+            return userAddress;
+        }
+
+        public async Task deleteAddress(int addressId)
         {
             throw new NotImplementedException();
         }
 
-        public void deleteAddress(int addressId)
+        public async Task<List<UserAddress>> GetAddressList(string userId)
         {
-            throw new NotImplementedException();
-        }
-
-        public List<UserAddress> GetAddressList(string userId)
-        {
-            throw new NotImplementedException();
+            return await _db.UserAddress.Where(x => x.UserId == userId).ToListAsync();
         }
     }
 }

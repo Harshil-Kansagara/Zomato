@@ -1,33 +1,45 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
+using Zomato.DomainModel.Data;
 using Zomato.DomainModel.Models;
 
 namespace Zomato.Repository.MenuRepository
 {
     public class MenuRepository : IMenuRepository
     {
-        public Menu AddMenuItem(Menu menu)
+        private ApplicationDbContext _db;
+
+        public MenuRepository(ApplicationDbContext db)
+        {
+            _db=db;
+        }
+
+        public async Task<Menu> AddMenuItem(Menu menu)
+        {
+            await _db.Menu.AddAsync(menu);
+            return menu;
+        }
+
+        public async Task DeleteMenu(int restaurantId, int itemId)
         {
             throw new NotImplementedException();
         }
 
-        public void DeleteMenu(int restaurantId, int itemId)
+        public async Task<int> GetItemPriceByItemId(int itemId)
         {
             throw new NotImplementedException();
         }
 
-        public int GetItemPriceByItemId(int itemId)
+        public async Task<List<Menu>> GetMenuByRestIdAndCuisineId(int restaurantId, int cuisineId)
         {
-            throw new NotImplementedException();
+            return await _db.Menu.Where(x => x.RestaurantId == restaurantId && x.CuisineId == cuisineId).ToListAsync();
         }
 
-        public List<Menu> GetMenuByRestaurantId(int restaurantId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public string GetMenuNameByItemId(int itemId)
+        public async Task<string> GetMenuNameByItemId(int itemId)
         {
             throw new NotImplementedException();
         }

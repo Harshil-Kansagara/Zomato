@@ -1,0 +1,35 @@
+<section>
+  <mat-card class="menu-card mat-elevation-z1">
+    <mat-card-content>
+      <div *ngFor="let cuisine of menuList">
+        <div class="cuisine-style">
+          <h4>{{cuisine.cuisineName}}</h4>
+        </div>
+        <hr />
+        <div *ngFor="let menu of cuisine.menus">
+          <div class="container">
+            <div class="card-container-left">
+              <h6>{{menu.itemName}}</h6>
+              <p>Rs. {{menu.itemPrice}}</p>
+            </div>
+            <div class="card-container-right">
+              <button mat-raised-button (click)="addItemToOrder(menu.itemId)">Add</button>
+            </div>
+          </div>
+          <hr />
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+  <mat-card class="order-card mat-elevation-z1">
+    <mat-card-title>Your Order</mat-card-title>
+    <mat-card-content>
+      <div *ngFor="let each of orderItem">
+        <h4>{{itemName}}</h4>
+      </div>
+    </mat-card-content>  
+    <mat-card-footer>
+      <button mat-raised-button>Place Order</button>
+    </mat-card-footer>
+  </mat-card>
+</section>

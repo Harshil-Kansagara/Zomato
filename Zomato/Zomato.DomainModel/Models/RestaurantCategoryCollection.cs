@@ -6,12 +6,10 @@ namespace Zomato.DomainModel.Models
 {
     public class RestaurantCategoryCollection
     {
-        private Category category;
-
-        public RestaurantCategoryCollection(int restaurantId, Category category)
+        public RestaurantCategoryCollection(int restaurantId, string categoryName)
         {
             RestaurantId = restaurantId;
-            this.category = category;
+            CategoryName = categoryName;
         }
 
         public int RestaurantId { get; set; }

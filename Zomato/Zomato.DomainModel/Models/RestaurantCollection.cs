@@ -6,9 +6,17 @@ namespace Zomato.DomainModel.Models
 {
     public class RestaurantCollection
     {
-        public List<Restaurant> Restaurant { get; set; }
-        public List<RestaurantLocation> RestaurantLocation { get; set; }
-        public List<RestaurantCuisineCollection> CuisineCollection { get; set; }
-        public List<RestaurantCategoryCollection> CategoryCollection { get; set; }
+        public Restaurant Restaurant { get; set; }
+        public List<string> RestaurantLocation { get; set; }
+        public List<string> Cuisines { get; set; }
+        public List<string> Categories { get; set; }
+
+        public RestaurantCollection()
+        {
+            Restaurant = new Restaurant();
+            RestaurantLocation = new List<string>();
+            Cuisines = new List<string>();
+            Categories = new List<string>();
+        }
     }
 }

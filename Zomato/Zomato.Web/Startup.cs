@@ -13,6 +13,28 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Zomato.DomainModel.Data;
+using Microsoft.AspNetCore.SpaServices.AngularCli;
+using Zomato.Repository.UnitofWork;
+using Zomato.Repository.RestCuisineRepository;
+using Zomato.Repository.UserRepository;
+using Zomato.Repository.UserAddressRepository;
+using Zomato.Repository.ReviewRepository;
+using Zomato.Repository.FollowRepository;
+using Zomato.Repository.CommentRepository;
+using Zomato.Repository.CuisineRepository;
+using Zomato.Repository.CategoryRepository;
+using Zomato.Repository.LikeRepository;
+using Zomato.Repository.MenuRepository;
+using Zomato.Repository.OrderedItemRepository;
+using Zomato.Repository.OrderRepository;
+using Zomato.Repository.RestaurantRepository;
+using Zomato.Repository.RestCategoryRepository;
+using Zomato.Repository.RestaurantLocationRepository;
+using System.Reflection;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Zomato.DomainModel.Models;
 
 namespace Zomato.Web
 {
@@ -28,6 +50,9 @@ namespace Zomato.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+            services.Configure<ApplicationSettingModel>(Configuration.GetSection("ApplicationSettings"));
+
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
@@ -35,16 +60,58 @@ namespace Zomato.Web
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<ICommentRepository, CommentRepository>();
+            services.AddScoped<ICuisineRepository, CuisineRepository>();
+            services.AddScoped<IFollowRepository, FollowRepository>();
+            services.AddScoped<ILikeRepository, LikeRepository>();
+            services.AddScoped<IMenuRepository, MenuRepository>();
+            services.AddScoped<IOrderedItemRepository, OrderedItemRepository>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<IRestLocationRepository, RestLocationRepository>();
+            services.AddScoped<IRestaurantRepository, RestaurantRepository>();
+            services.AddScoped<IRestCategoryRepository, RestCategoryRepository>();
+            services.AddScoped<IRestCuisineRepository, RestCuisineRepository>();
+            services.AddScoped<IReviewRepository, ReviewRepository>();
+            services.AddScoped<IUserAddressRepository, UserAddressRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
+
+
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("ZomatoDb"), 
                     b => b.MigrationsAssembly("Zomato.DomainModel")));
 
-            services.AddDefaultIdentity<IdentityUser>()
+            //services.AddIdentityCore<IdentityUser>().AddEntityFrameworkStores<ApplicationDbContext>();
+
+            services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddDefaultUI(UIFramework.Bootstrap4)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            var key = Encoding.UTF8.GetBytes(Configuration["ApplicationSettings:JWT_Secret"].ToString());
+
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(x =>
+            {
+                x.RequireHttpsMetadata = false;
+                x.SaveToken = false;
+                x.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ClockSkew = TimeSpan.Zero
+                };
+            });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -53,13 +120,7 @@ namespace Zomato.Web
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
-            }
-            else
-            {
-                app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
+                //app.UseDatabaseErrorPage();
             }
 
             app.UseHttpsRedirection();
@@ -68,11 +129,14 @@ namespace Zomato.Web
 
             app.UseAuthentication();
 
-            app.UseMvc(routes =>
+            app.UseMvc();
+            app.UseSpa(spa =>
             {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                spa.Options.SourcePath = "app";
+                if (env.IsDevelopment())
+                {
+                    spa.UseAngularCliServer(npmScript: "start");
+                }
             });
         }
     }

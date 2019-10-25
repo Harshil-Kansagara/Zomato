@@ -6,7 +6,9 @@ namespace Zomato.DomainModel.Models
 {
     public class ReviewCollection
     {
-        public List<Review> Review { get; set; }
-        public List<ReviewDataCollection> LikeCommentCountCollection { get; set; }
+        public Review Review { get; set; }
+        public string UserName { get; set; }
+        public int LikeCount { get; set; }
+        public int CommentCount { get; set; }
     }
 }

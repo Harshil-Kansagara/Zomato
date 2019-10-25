@@ -1,16 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using Zomato.DomainModel.Models;
 
 namespace Zomato.Repository.RestaurantRepository
 {
     public interface IRestaurantRepository
     {
-        List<Restaurant> ListRestaurant();
-        Restaurant AddRestaurant(Restaurant restaurant);
-        Restaurant GetRestaurantById(int restaurantId);
-        string GetRestaurantNameById(int restaurantId);
-        void deleteRestaurant(int restaurantId);
+        Task<List<Restaurant>> ListRestaurant();
+        Task<Restaurant> AddRestaurant(Restaurant restaurant);
+        Task<Restaurant> GetRestaurantById(int restaurantId);
+        Task<string> GetRestaurantNameById(int restaurantId);
+        Task deleteRestaurant(int restaurantId);
+        Task<int> GetRestaurantIdByRestaurantName(string restaurantName);
     }
 }

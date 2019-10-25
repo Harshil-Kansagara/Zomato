@@ -1,20 +1,32 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
+using Zomato.DomainModel.Data;
 using Zomato.DomainModel.Models;
 
 namespace Zomato.Repository.RestCategoryRepository
 {
     public class RestCategoryRepository : IRestCategoryRepository
     {
-        public RestCategory AddRestCategory(RestCategory restCategory)
+        private readonly ApplicationDbContext _db;
+
+        public RestCategoryRepository(ApplicationDbContext db)
         {
-            throw new NotImplementedException();
+            _db = db;
         }
 
-        public List<RestCategory> GetRestCategoryByRestaurantId(int restaurantId)
+        public async Task<RestCategory> AddRestCategory(RestCategory restCategory)
         {
-            throw new NotImplementedException();
+            await _db.RestCategory.AddAsync(restCategory);
+            return restCategory;
+        }
+
+        public async Task<List<RestCategory>> GetRestCategoryByRestaurantId(int restaurantId)
+        {
+            return await _db.RestCategory.Where(x => x.RestaurantId == restaurantId).ToListAsync();
         }
     }
 }

@@ -14,5 +14,7 @@ namespace Zomato.DomainModel.Models
         public string UserEmailAddress { get; set; }
 
         public string UserPassword { get; set; }
+
+        public string UserRole { get; set; }
     }
 }

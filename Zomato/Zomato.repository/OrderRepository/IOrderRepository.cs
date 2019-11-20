@@ -10,6 +10,9 @@ namespace Zomato.Repository.OrderRepository
     {
         Task<Order> AddOrder(Order order);
         Task<Order> GetOrderDataByOrderId(int orderId);
-        Task<List<Order>> GetOrderListByRestaurantId(int restaurantId);
+        Task<List<Order>> GetOrdersByRestaurantId(int restaurantId);
+        Task DeleteOrder(int orderId);
+        Task<List<Order>> GetOrdersByUserId(string userId);
+        Task DeleteOrderByRestaurant(int restaurantId);
     }
 }

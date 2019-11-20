@@ -10,5 +10,6 @@ namespace Zomato.Repository.RestCategoryRepository
     {
         Task<List<RestCategory>> GetRestCategoryByRestaurantId(int restaurantId);
         Task<RestCategory> AddRestCategory(RestCategory restCategory);
+        Task<List<RestCategory>> GetRestaurantIdByCategoryId(int categoryId);
     }
 }

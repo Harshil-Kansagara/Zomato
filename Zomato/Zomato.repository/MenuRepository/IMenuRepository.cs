@@ -10,8 +10,9 @@ namespace Zomato.Repository.MenuRepository
     {
         Task<List<Menu>> GetMenuByRestIdAndCuisineId(int restaurantId, int cuisineId);
         Task<Menu> AddMenuItem(Menu menu);
-        Task DeleteMenu(int restaurantId, int itemId);
+        Task DeleteMenu(int itemId);
         Task<string> GetMenuNameByItemId(int itemId);
         Task<int> GetItemPriceByItemId(int itemId);
+        Task DeleteMenuByRestaurantId(int restaurantId);
     }
 }

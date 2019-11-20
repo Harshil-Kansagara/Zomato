@@ -22,6 +22,14 @@ export class AccountService {
     return this.http.post(this.baseUrl + "register", register);
   }
 
+  public GetUserData(userId: string) {
+    return this.http.get(this.baseUrl + userId);
+  }
+
+  public getUsersList(userId: string) {
+    return this.http.get(this.baseUrl + "users/" + userId);
+  }
+
   intializeRegister(): Register {
     return {
       UserName: '',

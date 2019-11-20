@@ -5,7 +5,8 @@ import { Menu } from '../model/menu';
 @Injectable({ providedIn: 'root' })
 export class MenuService {
 
-  baseUrl = '/api/menu/'
+  baseUrl = '/api/menu/';
+ 
 
   constructor(private http: HttpClient) { }
 
@@ -15,6 +16,10 @@ export class MenuService {
 
   addMenu(restaurantName: string, menu: any) {
     return this.http.post(this.baseUrl + restaurantName + '/menu', menu);
+  }
+
+  deleteMenu(menuId: number) {
+    return this.http.delete(this.baseUrl + menuId);
   }
 
   initializeMenu(): Menu {

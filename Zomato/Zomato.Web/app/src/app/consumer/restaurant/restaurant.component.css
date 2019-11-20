@@ -24,3 +24,5 @@
 .mat-form-field-width { width: 400px; }
 
 .fa-times:hover { cursor: pointer; }
+
+.token a:hover{text-decoration:underline; cursor:pointer;}

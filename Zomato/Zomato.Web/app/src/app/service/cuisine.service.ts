@@ -6,14 +6,19 @@ import { Cuisine } from '../model/cuisine';
 
 export class CuisineService{
 
+  baseUrl: string = "api/cuisine/"
   constructor(private http: HttpClient){}
 
   getCuisineList() {
-    return this.http.get('api/cuisine');
+    return this.http.get(this.baseUrl);
   }
 
   getCuisineNameListById(cuisineId: number[]) {
-    return this.http.post('api/cuisine', cuisineId);
+    return this.http.post(this.baseUrl, cuisineId);
+  }
+
+  getCuisineListByRestaurant(restaurantName: string) {
+    return this.http.get(this.baseUrl + restaurantName);
   }
 
   initializeCuisine(): Cuisine {

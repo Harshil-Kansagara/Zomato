@@ -17,8 +17,13 @@ export class UserAddressService {
     return this.http.post(this.baseUrl, address);
   }
 
+  deleteUserAddress(addressId: number) {
+    return this.http.delete(this.baseUrl + addressId);
+  }
+
   initializeUserAddress(): UserAddress {
     return {
+      AddressId: 0,
       Address: null,
       UserId: null
     }

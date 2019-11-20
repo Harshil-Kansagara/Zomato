@@ -10,5 +10,6 @@ namespace Zomato.Repository.CommentRepository
     {
         Task<List<Comment>> GetCommentByReviewId(int reviewId);
         Task<Comment> AddComment(Comment comment);
+        Task DeleteComment(int reviewId);
     }
 }

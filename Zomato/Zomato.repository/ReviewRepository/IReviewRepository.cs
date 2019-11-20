@@ -11,5 +11,6 @@ namespace Zomato.Repository.ReviewRepository
         Task<List<Review>> GetReviewByRestaurantId(int restaurantId);
         Task<List<Review>> GetReviewByUserId(string userId);
         Task<Review> AddReview(Review newReview);
+        Task DeleteReview(int reviewId);
     }
 }

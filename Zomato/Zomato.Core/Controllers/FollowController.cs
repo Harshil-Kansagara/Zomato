@@ -18,46 +18,75 @@ namespace Zomato.Core.Controllers
         {
             _unitOfWork = unitOfWork;
         }
-        
+
         [HttpGet]
-        [Route("user/{userId}/follower")]
-        public async Task<FollowCollection> GetFollowers(string userId)
+        [Route("{userId}/follower")]
+        public async Task<List<FollowCollection>> GetFollowers(string userId)
         {
-            FollowCollection followCollection = new FollowCollection();
-            List<Follow> followers = await _unitOfWork.FollowRepository.GetFollowersByUserId(userId);
-            String userName = null;
-            for (int i=0;i<followers.Count;i++)
+            List<FollowCollection> followCollection = new List<FollowCollection>();
+            var followers = await _unitOfWork.FollowRepository.GetFollowerByUserId(userId);
+
+            foreach (var each in followers)
             {
-                userName = _unitOfWork.UserRepository.GetUsernameByUserId(followers[i].FollowerId).Result.UserName;
-                followCollection.UserName.Add(userName);
+                var model = new FollowCollection();
+                model.UserId = each.UserId;
+                model.UserName = _unitOfWork.UserRepository.GetUsernameByUserId(each.UserId).Result.UserName;
+                followCollection.Add(model);
             }
 
             return followCollection;
         }
 
         [HttpGet]
-        [Route("user/{userId}/following")]
-        public async Task<FollowCollection> GetFollowing(string userId)
+        [Route("{userId}/following")]
+        public async Task<List<FollowCollection>> GetFollowing(string userId)
         {
-            FollowCollection followCollection = new FollowCollection();
-            List<Follow> following = await _unitOfWork.FollowRepository.GetFollowingFromFollowerId(userId);
-            String userName = null;
-            for(int i = 0; i < following.Count; i++)
-            {
-                userName = _unitOfWork.UserRepository.GetUsernameByUserId(following[i].UserId).Result.UserName;
-                followCollection.UserName.Add(userName);
+            List<FollowCollection> followCollection = new List<FollowCollection>();
+            var following = await _unitOfWork.FollowRepository.GetFollowingByUserId(userId);
+            foreach (var each in following)
+            { 
+                var model = new FollowCollection();
+                model.UserId = each.FollowingId; 
+                model.UserName = _unitOfWork.UserRepository.GetUsernameByUserId(each.FollowingId).Result.UserName;
+                followCollection.Add(model);
             }
 
             return followCollection;
         }
 
         [HttpPost]
-        [Route("user/{userId}/follower")]
         public async Task<IActionResult> AddFollowers(Follow newFollow)
         {
-            Follow follow = await _unitOfWork.FollowRepository.AddFollower(newFollow);
-            _unitOfWork.commit();
-            return Ok();
+            if (ModelState.IsValid) {
+                var followList = await _unitOfWork.FollowRepository.GetFollowList();
+                foreach (var each in followList)
+                {
+                    if(each.UserId == newFollow.UserId && each.FollowingId == newFollow.FollowingId)
+                    {
+                        return BadRequest();
+                    }
+                }
+
+                Follow follow = await _unitOfWork.FollowRepository.AddFollower(newFollow);
+                _unitOfWork.commit();
+                return Ok(follow);
+            }
+            return BadRequest();
+        }
+
+        [HttpDelete]
+        [Route("{followerId}")]
+        public async Task DeleteFollower(string followerId)
+        {
+            try
+            {
+                await _unitOfWork.FollowRepository.RemoveFollower(followerId);
+                _unitOfWork.commit();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }

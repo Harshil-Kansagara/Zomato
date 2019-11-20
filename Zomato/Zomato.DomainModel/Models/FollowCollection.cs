@@ -6,6 +6,7 @@ namespace Zomato.DomainModel.Models
 {
     public class FollowCollection
     {
-        public List<string> UserName { get; set; }
+        public string UserId { get; set; }
+        public string UserName { get; set; }
     }
 }

@@ -7,28 +7,33 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ToastrModule } from 'ngx-toastr';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { MatInputModule, MatFormFieldModule, MatButtonModule, MatCheckboxModule, MatTableModule, MatPaginatorModule, MatSortModule, MatIconModule, MatCardModule, MatTabsModule, MatDividerModule, MatDialogModule, MatSelectModule, MatOptionModule } from '@angular/material';
+import { MatInputModule, MatFormFieldModule, MatButtonModule, MatCheckboxModule, MatTableModule, MatPaginatorModule, MatSortModule, MatIconModule, MatCardModule, MatTabsModule, MatDividerModule, MatDialogModule, MatSelectModule, MatOptionModule, MatGridListModule } from '@angular/material';
 import { ListRestaurantComponent } from './restaurant/list/list-restaurant.component';
-import { AuthGuard } from '../auth/auth.guard';
-import { AuthInterceptor } from '../auth/auth.interceptor';
 import { AddRestaurantComponent } from './restaurant/add-restaurant/add-restaurant.component';
 import { AddRestaurantInfoComponent } from './restaurant/add-restaurant/add-restaurant-info.component';
 import { AddRestaurantSearchComponent } from './restaurant/add-restaurant/add-restaurant-search.component';
 import { RestaurantResolver } from '../service/restaurant-resolver.service';
 import { AddMenuComponent } from './restaurant/add-menu/add-menu.component';
 import { DetailRestaurantComponent } from './restaurant/detail/detail-restaurant.component';
+import { Ng2SearchPipeModule } from 'ng2-search-filter';
+import { OrderDetailDialogComponent } from '../consumer/user/order/user-order.component';
+import { addCommentDialogComponent } from '../consumer/restaurant/review/review-restaurant.component';
+import { BarRatingModule } from 'ngx-bar-rating';
+import { NgxPaginationModule } from 'ngx-pagination';
+import { AuthAdminInterceptor } from '../service/auth-admin/auth-admin.interceptor';
+import { AuthAdminGuard } from '../service/auth-admin/auth-admin.guard';
 
 const routes: Routes = [
   { path: '', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   {
     path: 'restaurant',
-    canActivate: [AuthGuard],
+    canActivate: [AuthAdminGuard],
     component: ListRestaurantComponent,
   },
   {
     path: 'restaurant/create',
-    canActivate: [AuthGuard],
+    canActivate: [AuthAdminGuard],
     component: AddRestaurantComponent,
     resolve: { resolvedData: RestaurantResolver },
     children: [
@@ -39,12 +44,12 @@ const routes: Routes = [
   },
   {
     path: 'restaurant/:restaurantName',
-    canActivate: [AuthGuard],
+    canActivate: [AuthAdminGuard],
     component: DetailRestaurantComponent
   },
   {
     path: 'restaurant/:restaurantName/add-menu',
-    canActivate: [AuthGuard],
+    canActivate: [AuthAdminGuard],
     component: AddMenuComponent
   }
 ]
@@ -57,8 +62,11 @@ const routes: Routes = [
     FormsModule,
     MatInputModule, MatFormFieldModule, MatButtonModule, MatCheckboxModule, MatTabsModule,
     MatTableModule, MatPaginatorModule, MatSortModule, MatIconModule, MatCardModule,
-    MatDividerModule, MatDialogModule, MatSelectModule, MatOptionModule,
+    MatDividerModule, MatDialogModule, MatSelectModule, MatOptionModule, MatGridListModule,
     ReactiveFormsModule,
+    Ng2SearchPipeModule,
+    NgxPaginationModule,
+    BarRatingModule,
     ToastrModule.forRoot({
       progressBar: true
     })
@@ -71,13 +79,16 @@ const routes: Routes = [
     AddRestaurantInfoComponent,
     AddRestaurantSearchComponent,
     DetailRestaurantComponent,
-    AddMenuComponent
+    AddMenuComponent,
+    OrderDetailDialogComponent,
+    addCommentDialogComponent
   ],
   providers: [Debuger, {
     provide: HTTP_INTERCEPTORS,
-    useClass: AuthInterceptor,
+    useClass: AuthAdminInterceptor,
     multi: true
-  }]
+  }],
+  entryComponents: [OrderDetailDialogComponent, addCommentDialogComponent]
 })
 
 export class AdminModule {

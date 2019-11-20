@@ -233,13 +233,13 @@ namespace Zomato.DomainModel.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("FollowerId");
+                    b.Property<string>("FollowingId");
 
                     b.Property<string>("UserId");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("FollowerId");
+                    b.HasIndex("FollowingId");
 
                     b.HasIndex("UserId");
 
@@ -294,15 +294,11 @@ namespace Zomato.DomainModel.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("AddressId");
+                    b.Property<int>("AddressId");
 
                     b.Property<string>("OrderDate");
 
-                    b.Property<int?>("RestaurantId");
-
-                    b.Property<int>("RestauratnId");
-
-                    b.Property<int>("UserAddressId");
+                    b.Property<int>("RestaurantId");
 
                     b.Property<string>("UserId");
 
@@ -330,10 +326,6 @@ namespace Zomato.DomainModel.Migrations
                     b.Property<int>("OrderId");
 
                     b.HasKey("OrderItemId");
-
-                    b.HasIndex("ItemId");
-
-                    b.HasIndex("OrderId");
 
                     b.ToTable("OrderedItem");
                 });
@@ -507,7 +499,7 @@ namespace Zomato.DomainModel.Migrations
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
                         .WithMany()
-                        .HasForeignKey("FollowerId");
+                        .HasForeignKey("FollowingId");
 
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "IdentityUser")
                         .WithMany()
@@ -543,28 +535,17 @@ namespace Zomato.DomainModel.Migrations
                 {
                     b.HasOne("Zomato.DomainModel.Models.UserAddress", "UserAddress")
                         .WithMany()
-                        .HasForeignKey("AddressId");
+                        .HasForeignKey("AddressId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Zomato.DomainModel.Models.Restaurant", "Restaurant")
                         .WithMany()
-                        .HasForeignKey("RestaurantId");
+                        .HasForeignKey("RestaurantId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "IdentityUser")
                         .WithMany()
                         .HasForeignKey("UserId");
-                });
-
-            modelBuilder.Entity("Zomato.DomainModel.Models.OrderedItem", b =>
-                {
-                    b.HasOne("Zomato.DomainModel.Models.Menu", "Menu")
-                        .WithMany()
-                        .HasForeignKey("ItemId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("Zomato.DomainModel.Models.Order", "Order")
-                        .WithMany()
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Zomato.DomainModel.Models.RestCategory", b =>

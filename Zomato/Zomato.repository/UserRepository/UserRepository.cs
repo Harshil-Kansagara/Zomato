@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Zomato.DomainModel.Data;
 using Zomato.DomainModel.Models;
 
@@ -34,7 +36,12 @@ namespace Zomato.Repository.UserRepository
 
         public async Task<IdentityUser> GetUserDetail(string userId)
         {
-            throw new NotImplementedException();
+            return await _userManager.FindByIdAsync(userId);
+        }
+
+        public async Task<List<IdentityUser>> GetUserList()
+        {
+            return await _userManager.Users.ToListAsync();
         }
 
         public async Task<IdentityUser> GetUsernameByUserId(string userId)
@@ -45,6 +52,12 @@ namespace Zomato.Repository.UserRepository
         public async Task<string> GetUserRole(User user)
         {
             var result = await _userManager.GetRolesAsync(await FindByEmail(user.UserEmailAddress));
+            return result[0];
+        }
+
+        public async Task<string> getUserRole(IdentityUser user)
+        {
+            var result = await _userManager.GetRolesAsync(user);
             return result[0];
         }
 

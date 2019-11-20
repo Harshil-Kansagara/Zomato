@@ -8,7 +8,14 @@ namespace Zomato.DomainModel.Models
     {
         public Review Review { get; set; }
         public string UserName { get; set; }
+        public string RestaurantName { get; set; }
         public int LikeCount { get; set; }
         public int CommentCount { get; set; }
+        public List<CommentCollection> Comments { get; set; }
+
+        public ReviewCollection()
+        {
+            Comments = new List<CommentCollection>();
+        }
     }
 }

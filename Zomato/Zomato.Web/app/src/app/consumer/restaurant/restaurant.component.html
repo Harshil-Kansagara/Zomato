@@ -78,9 +78,9 @@
         <a class="navbar-brand" [routerLink]="['']">
           <img src="../../../assets/logo.png" alt="logo">
         </a>
-        <button mat-raised-button (click)="sidenav.toggle()" *ngIf="!token" style="margin-right:30px;">Login</button>
-        <div *ngIf="token">
-          <a href="" style="margin-right:15px;">Hi, {{userName}}</a>
+        <button mat-raised-button (click)="sidenav.toggle()" *ngIf="!userToken" style="margin-right:30px;">Login</button>
+        <div class="token" *ngIf="userToken">
+          <a (click)="navigateUserProfile()" style="margin-right:15px;">Hi, {{userName}}</a>
           <button mat-raised-button (click)="logoutUser()" style="margin-right:30px;">Log Out</button>
         </div>
       </nav>

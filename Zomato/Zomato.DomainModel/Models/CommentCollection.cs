@@ -6,7 +6,8 @@ namespace Zomato.DomainModel.Models
 {
     public class CommentCollection
     {
-        public Comment Comment { get; set; }
+        public int CommentId { get; set; }
+        public string CommentData { get; set; }
         public string UserName { get; set; }
     }
 }

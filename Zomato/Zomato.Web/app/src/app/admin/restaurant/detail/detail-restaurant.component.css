@@ -11,3 +11,7 @@ table { width: 100%; }
 .mat-header-cell { color: black; }
 
 .fa-trash { color: red; }
+
+a {margin-left:10px;}
+
+mat-grid-tile { height: auto; }

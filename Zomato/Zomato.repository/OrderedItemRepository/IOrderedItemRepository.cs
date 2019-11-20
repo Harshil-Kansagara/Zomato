@@ -10,5 +10,6 @@ namespace Zomato.Repository.OrderedItemRepository
     {
         Task<OrderedItem> AddOrderedItem(OrderedItem orderedItem);
         Task<List<OrderedItem>> GetOrderedItemByOrderId(int orderId);
+        Task DeleteOrderItem(int orderId);
     }
 }

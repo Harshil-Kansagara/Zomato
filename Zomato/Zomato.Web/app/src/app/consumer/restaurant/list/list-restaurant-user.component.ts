@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, ViewChild, AfterViewInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { RestaurantService } from '../../../service/restaurant.service';
 import { ToastrService } from 'ngx-toastr';
 import { MatTableDataSource, MatPaginator, MatSort, MatSidenav } from '@angular/material';
@@ -8,6 +8,7 @@ import { Restaurant } from '../../../model/restaurant';
 import { Cuisine } from '../../../model/cuisine';
 import { CuisineService } from '../../../service/cuisine.service';
 import { RestCuisineService } from '../../../service/rest-cuisines.service';
+import { RestCategoryService } from '../../../service/rest-category.service';
 
 @Component({
   templateUrl: 'list-restaurant-user.component.html',
@@ -16,23 +17,29 @@ import { RestCuisineService } from '../../../service/rest-cuisines.service';
 
 export class ListRestaurantUserComponent implements OnInit, OnDestroy {
   restaurantList: Restaurant[] = [];
-  promise: Subscription;
+  heading; categoryName: string;
+  restCategorySubscription: Subscription;
   searchText: string;
   p: number = 1;
   cuisines: Cuisine[];
   cuisineName: string[] = null;
-  //tempCuisine: Cuisine[];
   cuisineId: number[] = [];
 
   @ViewChild('sidenav', { static: false }) sidenav: MatSidenav; 
 
   constructor(private toastr: ToastrService, private restCuisineService: RestCuisineService,
     private cuisineService: CuisineService, private restaurantService: RestaurantService,
-    private router: Router) { }
+    private router: Router, private activatedRoute: ActivatedRoute, private restCategoryService: RestCategoryService) {
+
+    this.activatedRoute.params.subscribe(params => {
+      this.categoryName = params.categoryName;
+    });
+    console.log(this.categoryName);
+  }
 
   ngOnInit(): void {
     this.loadRestaurantList();
-    this.promise = this.cuisineService.getCuisineList().subscribe(
+    this.restCategorySubscription = this.cuisineService.getCuisineList().subscribe(
       result => {
         if (result != null) {
           this.cuisines = result as Cuisine[];
@@ -44,19 +51,36 @@ export class ListRestaurantUserComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.promise.unsubscribe();
+    if (this.restCategorySubscription) {
+      this.restCategorySubscription.unsubscribe();
+    }
   }
 
   loadRestaurantList(): void {
-    this.promise = this.restaurantService.getListRestaurantDetail().subscribe(
-      res => {
-        if (res != null) {
-          this.restaurantList = res as Restaurant[];
+    if (this.categoryName == 'breakfast' || this.categoryName == 'lunch' || this.categoryName == 'dinner'
+      || this.categoryName == 'cafe' || this.categoryName == 'dessert') {
+      this.heading = this.categoryName.charAt(0).toUpperCase() + this.categoryName.slice(1) + " Restaurant"
+      this.restCategorySubscription = this.restCategoryService.getRestaurantListByCategory(this.categoryName).subscribe(
+        res => {
+          if (res != null) {
+            this.restaurantList = res as Restaurant[];
+          }
+        }, err => {
+          console.log(err);
         }
-      }, err => {
-        console.log(err);
-      }
-    );
+      );
+    } else {
+        this.heading = "Restaurants"
+      this.restCategorySubscription = this.restaurantService.getListRestaurantDetail().subscribe(
+        res => {
+          if (res != null) {
+            this.restaurantList = res as Restaurant[];
+          }
+        }, err => {
+          console.log(err);
+        }
+      );
+    }
   }
 
   checkedCuisine(id: number): void {
@@ -74,7 +98,7 @@ export class ListRestaurantUserComponent implements OnInit, OnDestroy {
 
   showRestaurant(): void {
     console.log(this.cuisineId);
-    this.promise = this.cuisineService.getCuisineNameListById(this.cuisineId).subscribe(
+    this.restCategorySubscription = this.cuisineService.getCuisineNameListById(this.cuisineId).subscribe(
       res => {
         if (res != null) {
           this.cuisineName = res as string[];
@@ -85,7 +109,7 @@ export class ListRestaurantUserComponent implements OnInit, OnDestroy {
       }
     );
 
-    this.promise = this.restCuisineService.getRestaurantListByCuisineIds(this.cuisineId).subscribe(
+    this.restCategorySubscription = this.restCuisineService.getRestaurantListByCuisineIds(this.cuisineId).subscribe(
       res => {
         if (res != null) {
           this.restaurantList = res as Restaurant[];
@@ -98,11 +122,10 @@ export class ListRestaurantUserComponent implements OnInit, OnDestroy {
   }
 
   resDetail(restaurantName: string): void {
-    this.router.navigateByUrl('restaurant/' + this.hyphenateUrlParams(restaurantName));
+    this.router.navigateByUrl('restaurant/' + restaurantName);
   }
 
   unCheck(): void {
-   // this.cuisines = this.tempCuisine;
     this.cuisineId = [];
     this.isChecked(0);
   }
@@ -121,7 +144,7 @@ export class ListRestaurantUserComponent implements OnInit, OnDestroy {
     }
   }
 
-  hyphenateUrlParams(str: string) {
-    return str.replace(' ', '-');
-  }
+  //hyphenateUrlParams(str: string) {
+  //  return str.replace(/\s+/g, '-');
+  //}
 }

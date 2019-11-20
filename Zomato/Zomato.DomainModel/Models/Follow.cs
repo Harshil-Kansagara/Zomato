@@ -15,8 +15,8 @@ namespace Zomato.DomainModel.Models
         [ForeignKey("UserId")]
         public IdentityUser IdentityUser { get; set; }
 
-        public string FollowerId { get; set; }
-        [ForeignKey("FollowerId")]
+        public string FollowingId { get; set; }
+        [ForeignKey("FollowingId")]
         public IdentityUser User { get; set; }
     }
 }

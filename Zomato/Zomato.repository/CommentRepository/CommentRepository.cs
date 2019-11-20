@@ -24,6 +24,15 @@ namespace Zomato.Repository.CommentRepository
             return comment;
         }
 
+        public async Task DeleteComment(int reviewId)
+        {
+            var commentList = await _db.Comment.Where(x => x.ReviewId == reviewId).ToListAsync();
+            foreach (var each in commentList)
+            {
+                _db.Comment.Remove(each);
+            }
+        }
+
         public async Task<List<Comment>> GetCommentByReviewId(int reviewId)
         {
             return await _db.Comment.Where(x => x.ReviewId == reviewId).ToListAsync();

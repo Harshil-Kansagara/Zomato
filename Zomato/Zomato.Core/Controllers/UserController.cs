@@ -119,10 +119,43 @@ namespace Zomato.Core.Controllers
         }
 
         [HttpGet]
-        [Route("user/{userId}")]
+        [Route("{userId}")]
         public async Task<IdentityUser> GetUserDetail(string userId)
         {
             return await _unitOfWork.UserRepository.GetUserDetail(userId);
+        }
+
+        [HttpGet]
+        [Route("users/{userId}")]
+        public async Task<List<IdentityUser>> GetUserList(string userId)
+        {
+            List<IdentityUser> identityUsers = new List<IdentityUser>();
+                
+            var userList = await _unitOfWork.UserRepository.GetUserList();
+
+            foreach (var user in userList)
+            {
+                var model = new IdentityUser();
+                string userRole = await _unitOfWork.UserRepository.getUserRole(user);
+                if(userRole == "user")
+                {
+                    if(user.Id != userId)
+                    {
+                        identityUsers.Add(user);
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                }
+                else
+                {
+                    continue;
+                }
+            }
+
+            return identityUsers;
+
         }
     }
 }

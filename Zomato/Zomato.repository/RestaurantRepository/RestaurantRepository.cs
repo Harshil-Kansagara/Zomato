@@ -40,7 +40,8 @@ namespace Zomato.Repository.RestaurantRepository
 
         public async Task<string> GetRestaurantNameById(int restaurantId)
         {
-            throw new NotImplementedException();
+            var restaurant = await _db.Restaurant.FindAsync(restaurantId);
+            return restaurant.RestaurantName;
         }
 
         public async Task<List<Restaurant>> ListRestaurant()
@@ -51,7 +52,10 @@ namespace Zomato.Repository.RestaurantRepository
         public async Task<int> GetRestaurantIdByRestaurantName(string restaurantName)
         {
             var restaurant= await _db.Restaurant.Where(x => x.RestaurantName == restaurantName).FirstOrDefaultAsync();
-            return restaurant.RestaurantId;
+            if (restaurant != null) { 
+                return restaurant.RestaurantId;
+            }
+            return 0;
         }
     }
 }

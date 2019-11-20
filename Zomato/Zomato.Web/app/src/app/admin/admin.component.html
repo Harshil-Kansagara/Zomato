@@ -8,7 +8,7 @@
       <a class="nav-link text-dark" [routerLink]="['/register']" routerLinkActive="active" [routerLinkActiveOptions]="{ exact : true}">Register</a>
     </li>
   </ul>-->
-  <ul class="navbar-nav ml-auto" *ngIf="token">
+  <ul class="navbar-nav ml-auto" *ngIf="userToken">
     <li class="nav-item">
       <a class="nav-link text-dark">Hello {{userName}}</a>
     </li>

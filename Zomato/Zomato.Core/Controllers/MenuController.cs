@@ -26,7 +26,7 @@ namespace Zomato.Core.Controllers
         public async Task<List<MenuCollection>> MenuList(string restaurantName)
         {
             List<MenuCollection> menuCollections = new List<MenuCollection>();
-            restaurantName = restaurantName.Replace('-', ' ');
+            //restaurantName = restaurantName.Replace('-', ' ');
             var restaurantId = await _unitOfWork.RestaurantRepository.GetRestaurantIdByRestaurantName(restaurantName);
 
             var _restCuisine = await _unitOfWork.RestCuisineRepository.GetRestCuisinesByRestaurantId(restaurantId);
@@ -34,7 +34,7 @@ namespace Zomato.Core.Controllers
             foreach(var each in _restCuisine)
             {
                 var model = new MenuCollection();
-                model.CuisineName = await _unitOfWork.CuisineRepository.GetCuisineById(each.CuisineId);
+                model.CuisineName = _unitOfWork.CuisineRepository.GetCuisineById(each.CuisineId).Result.CuisineName;
                 model.Menus = await _unitOfWork.MenuRepository.GetMenuByRestIdAndCuisineId(restaurantId, each.CuisineId);
 
                 menuCollections.Add(model);
@@ -46,16 +46,9 @@ namespace Zomato.Core.Controllers
         [Route("{restaurantName}/menu")]
         public async Task<IActionResult> Create(string restaurantName, List<Menu> newMenu)
         {
-            var restaurantId = 0;
-            restaurantName = restaurantName.Replace('-', ' ');
-            List<Restaurant> restaurant = await _unitOfWork.RestaurantRepository.ListRestaurant();
-            for(int i = 0; i < restaurant.Count; i++)
-            {
-                if(restaurant[i].RestaurantName == restaurantName)
-                {
-                    restaurantId = restaurant[i].RestaurantId;
-                }
-            }
+            var restaurantId = await _unitOfWork.RestaurantRepository.GetRestaurantIdByRestaurantName(restaurantName);
+            //restaurantName = restaurantName.Replace('-', ' ');
+           
 
             //List<Menu> menu = new List<Menu>();
 
@@ -94,7 +87,7 @@ namespace Zomato.Core.Controllers
         {
             try
             {
-                await _unitOfWork.MenuRepository.DeleteMenu(restaurantId, itemId);
+                await _unitOfWork.MenuRepository.DeleteMenu(itemId);
                 _unitOfWork.commit();
             }
             catch (Exception ex)

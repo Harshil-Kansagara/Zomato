@@ -23,10 +23,10 @@ namespace Zomato.Repository.CuisineRepository
             return await _db.Cuisine.ToListAsync();
         }
 
-        public async Task<string> GetCuisineById(int cuisineId)
+        public async Task<Cuisine> GetCuisineById(int cuisineId)
         {
-            var cuisine = await _db.Cuisine.Where(x => x.CuisineId == cuisineId).FirstAsync();
-            return cuisine.CuisineName;
+            return await _db.Cuisine.Where(x => x.CuisineId == cuisineId).FirstAsync();
+            //return cuisine.CuisineName;
         }
     }
 }

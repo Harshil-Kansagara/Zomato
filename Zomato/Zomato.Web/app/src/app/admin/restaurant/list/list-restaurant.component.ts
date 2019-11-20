@@ -35,7 +35,9 @@ export class ListRestaurantComponent implements OnInit, AfterViewInit, OnDestroy
   }
 
   ngOnDestroy(): void {
-    this.promise.unsubscribe();
+    if (this.promise) {
+      this.promise.unsubscribe();
+    }
   }
 
   doFilter(value: string) {
@@ -54,7 +56,7 @@ export class ListRestaurantComponent implements OnInit, AfterViewInit, OnDestroy
             data.RestaurantName = item['restaurantName'];
             this.restaurant.push(data);
           }
-          console.log(this.restaurant);
+         
           this.dataSource.data = this.restaurant as Restaurant[];
         }
       }
@@ -78,15 +80,19 @@ export class ListRestaurantComponent implements OnInit, AfterViewInit, OnDestroy
     }
   }
 
-  hyphenateUrlParams(str: string) {
-    return str.replace(' ', '-');
-  }
+  //hyphenateUrlParams(str: string) {
+  //  return str.replace(' ', '-');
+  //}
 
   detailRestaurant(restaurantId: number): void {
     for (let each of this.restaurant) {
       if (restaurantId == each.RestaurantId) {
-        this.router.navigateByUrl('admin/restaurant/' + this.hyphenateUrlParams(each.RestaurantName));
+        this.router.navigateByUrl('admin/restaurant/' + each.RestaurantName);
       }
     }
+  }
+
+  editRestaurant(restaurantId: number): void {
+    this.router.navigateByUrl('admin/restaurant/' + restaurantId +"/edit");
   }
 }

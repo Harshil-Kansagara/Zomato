@@ -24,6 +24,15 @@ namespace Zomato.Repository.ReviewRepository
             return newReview;
         }
 
+        public async Task DeleteReview(int reviewId)
+        {
+            var review = await _db.Review.FindAsync(reviewId);
+            if (review != null)
+            {
+                _db.Review.Remove(review);
+            }
+        }
+
         public async Task<List<Review>> GetReviewByRestaurantId(int restaurantId)
         {
             return await _db.Review.Where(x => x.RestaurantId == restaurantId).ToListAsync();
@@ -31,7 +40,7 @@ namespace Zomato.Repository.ReviewRepository
 
         public async Task<List<Review>> GetReviewByUserId(string userId)
         {
-            throw new NotImplementedException();
+            return await _db.Review.Where(x => x.UserId == userId).ToListAsync();
         }
     }
 }

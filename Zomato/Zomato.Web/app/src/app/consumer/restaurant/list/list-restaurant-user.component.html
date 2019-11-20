@@ -30,7 +30,7 @@
     <section>
       <div class="container-fluid">
         <h5 class="card-container-left" style="text-align:justify;">
-          Restaurants
+          {{heading}}
         </h5>
         <div class="card-container-right">
           <form autocomplete="off" style="display:inline">
@@ -66,7 +66,7 @@
               </mat-card-content>
               <mat-card-actions>
                 <span class="mat-card-rating">
-                  <i class="fa fa-star" aria-hidden="true"></i> Rating
+                  <i class="fa fa-star" aria-hidden="true"></i> {{each.ratingAvg | number : '1.1-1'}}
                 </span>
                 <button mat-raised-button class="mat-card-button" (click)="resDetail(each.restaurant.restaurantName)">Order Now</button>
               </mat-card-actions>

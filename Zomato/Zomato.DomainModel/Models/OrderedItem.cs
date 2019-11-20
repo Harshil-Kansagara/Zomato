@@ -12,12 +12,12 @@ namespace Zomato.DomainModel.Models
         public int OrderItemId { get; set; }
 
         public int OrderId { get; set; }
-        [ForeignKey("OrderId")]
-        public Order Order { get; set; }
+        //[ForeignKey("OrderId")]
+        //public Order Order { get; set; }
 
         public int ItemId { get; set; }
-        [ForeignKey("ItemId")]
-        public Menu Menu { get; set; }
+        //[ForeignKey("ItemId")]
+        //public Menu Menu { get; set; }
 
         public int ItemQuantity { get; set; }
     }

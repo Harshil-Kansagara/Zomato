@@ -10,10 +10,12 @@
           <div class="container">
             <div class="card-container-left">
               <h6>{{menu.itemName}}</h6>
-              <p>Rs. {{menu.itemPrice}}</p>
+              <p>{{menu.itemPrice | currency:'INR':true}}</p>
             </div>
             <div class="card-container-right">
-              <button mat-raised-button (click)="addItemToOrder(menu.itemId)">Add</button>
+              <button mat-raised-button (click)="addItemToOrder(menu)">Add</button>
+              <button mat-raised-button *ngIf="itemInCart(menu) | async" style="margin-left:5px;"
+                        (click)="removeItemFromCart(menu)">Remove item from cart</button>
             </div>
           </div>
           <hr />
@@ -21,15 +23,49 @@
       </div>
     </mat-card-content>
   </mat-card>
+  <!--<div class="order-card">
+    <app-item-cart></app-item-cart>
+  </div>-->
   <mat-card class="order-card mat-elevation-z1">
-    <mat-card-title>Your Order</mat-card-title>
+    <mat-card-title><h4>Your Order</h4></mat-card-title>
+    <hr />
     <mat-card-content>
-      <div *ngFor="let each of orderItem">
-        <h4>{{itemName}}</h4>
+      <div *ngFor="let item of cartItems">
+        <h6><b>{{item.menu.itemName}}</b></h6>
+        <div class="container">
+          <div style="float:left; text-align:left;">
+            <p>{{item.ItemQuantity}} x {{item.menu.itemPrice | currency:'INR':true}}</p>
+          </div>
+          <div style="float:right; text-align:right;">
+            <p class="text--bold text--red js-product-total">{{item.totalCost| currency:'INR':true}}</p>
+          </div>
+        </div>
       </div>
-    </mat-card-content>  
+      <hr />
+      <div class="container">
+        <div style="float:left; text-align:left;">
+          <h5> Sub Total ({{itemCount}} items): </h5>
+        </div>
+        <div style="float:right; text-align: right;">
+          <span class="text--red text--bold js-cart-total">{{(cart | async).itemsTotal | currency:'INR':true}}</span>
+        </div>
+      </div>
+    </mat-card-content>
     <mat-card-footer>
-      <button mat-raised-button>Place Order</button>
+      <div>
+          <button mat-raised-button class="btn btn-primary"
+                  [attr.disabled]="itemCount === 0 ? true : null"
+                  (click)="openCheckout()">
+            Checkout
+          </button>
+          or
+          <button mat-raised-button
+                  class="btn btn-secondary"
+                  (click)="emptyCart()"
+                  [attr.disabled]="itemCount === 0 ? true : null">
+            Empty Cart
+          </button>
+      </div>
     </mat-card-footer>
   </mat-card>
 </section>

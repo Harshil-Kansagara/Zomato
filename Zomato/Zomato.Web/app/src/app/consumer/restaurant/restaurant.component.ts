@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { Login } from '../../model/login';
@@ -13,52 +13,52 @@ import { Router } from '@angular/router';
   styleUrls: ['./restaurant.component.css']
 })
 
-export class RestaurantComponent implements OnInit {
-  registerToken: boolean = false;
+export class RestaurantComponent implements OnInit, OnDestroy {
+  registerToken; userToken: boolean = false;
   register: Register;
   login: Login;
-  promise: Subscription;
-  token: string;
-  decode_token: string;
-  userName: string;
+  userSubscription: Subscription;
+  token_user; decode_token; userName; userId: string;
 
-  constructor(private toastr: ToastrService, private accountService: AccountService, private restaurantService: RestaurantService, private router: Router) { }
+  constructor(private toastr: ToastrService, private accountService: AccountService,
+            private router: Router) { }
 
   ngOnInit() {
     this.register = this.accountService.intializeRegister();
     this.login = this.accountService.initializeLogin();
-    this.token = localStorage.getItem('token');
-    if (this.token != null) {
-      console.log("Token is not null: ", this.token);
-      this.decode_token = jwt_decode(this.token)
+    this.token_user = localStorage.getItem('token_user');
+    if (this.token_user != null) {
+      console.log("Token is not null: ", this.token_user);
+      this.decode_token = jwt_decode(this.token_user)
       if (this.decode_token['UserRole'] == "user") {
         this.userName = this.decode_token['UserName'];
+        this.userId = this.decode_token['UserId'];
+        this.userToken = true;
+      } else {
+        this.userToken = false;
       }
     } else {
       console.log("Token is null");
     }
-
-    this.loadRestaurantList();
   }
 
-  ngOnDestroy(): void {
-    this.promise.unsubscribe();
-  }
-
-  loadRestaurantList() {
-
+  ngOnDestroy() {
+    if (this.userSubscription) {
+      this.userSubscription.unsubscribe();
+    }
   }
 
   reg(): void {
     this.registerToken = true;
   }
+
   log(): void {
     this.registerToken = false;
   }
 
   registerUser(): void {
     this.register.UserRole = "user";
-    this.promise = this.accountService.Register(this.register).subscribe(
+    this.userSubscription = this.accountService.Register(this.register).subscribe(
       (result: any) => {
         if (result.succeeded) {
           this.toastr.success("Register Successfully");
@@ -78,7 +78,7 @@ export class RestaurantComponent implements OnInit {
 
   loginUser(): void {
     console.log(this.login);
-    this.promise = this.accountService.Login(this.login).subscribe(
+    this.userSubscription = this.accountService.Login(this.login).subscribe(
       (res: any) => {
         if (res != null) {
           console.log(res.token);
@@ -87,6 +87,7 @@ export class RestaurantComponent implements OnInit {
             localStorage.setItem('token', res.token);
             window.location.reload();
             this.toastr.success("Login Successful");
+            this.userToken = true;
             //window.location.href = "admin/restaurant";
           } else {
             this.toastr.error("You don't have priviledge to access this page");
@@ -100,6 +101,10 @@ export class RestaurantComponent implements OnInit {
         }
       }
     );
+  }
+
+  navigateUserProfile(): void {
+    this.router.navigateByUrl("users/" + this.userName);
   }
 
   logoutUser() {

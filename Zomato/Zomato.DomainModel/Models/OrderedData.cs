@@ -6,9 +6,8 @@ namespace Zomato.DomainModel.Models
 {
     public class OrderedData
     {
-        public int RestaurantId { get; set; }
         public string UserId { get; set; }
-        public int UserAddressId { get; set; }
-        public List<ItemDataCollection> ItemDataCollection { get; set; }
+        public int AddressId { get; set; }
+        public List<ItemDataCollection> Items { get; set; }
     }
 }

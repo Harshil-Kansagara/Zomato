@@ -13,8 +13,16 @@ export class ReviewService {
     return this.http.get(this.baseUrl + restaurantName + "/review");
   }
 
+  getReviewByUser(userId: string) {
+    return this.http.get(this.baseUrl + "user/" + userId);
+  }
+
   addNewReview(restaurantName: string, review: Review) {
     return this.http.post(this.baseUrl + restaurantName + "/review", review);
+  }
+
+  deleteReview(reviewId: number) {
+    return this.http.delete(this.baseUrl + reviewId);
   }
 
   initializeReview(): Review {

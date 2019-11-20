@@ -15,7 +15,7 @@ export class AddMenuComponent implements OnInit, OnDestroy {
   pageTitle = "Add Menu";
   menu: Menu;
   menuForm: FormGroup;
-  promise: Subscription;
+  cuisineSubscription; menuSubscription: Subscription;
   restaurantName: string;
   cuisine: string[];
 
@@ -27,7 +27,7 @@ export class AddMenuComponent implements OnInit, OnDestroy {
     this.activiateRoute.params.subscribe(params => {
       this.restaurantName = params.restaurantName;
     });
-    this.promise = this.cuisineService.getCuisineList().subscribe(
+    this.cuisineSubscription = this.cuisineService.getCuisineListByRestaurant(this.restaurantName).subscribe(
       res => {
         if (res != null) {
           this.cuisine = res as string[]
@@ -46,7 +46,12 @@ export class AddMenuComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.promise.unsubscribe();
+    if (this.cuisineSubscription) {
+      this.cuisineSubscription.unsubscribe();
+    }
+    if (this.menuSubscription) {
+      this.menuSubscription.unsubscribe();
+    }
   }
 
   buildMenu(): FormGroup {
@@ -63,9 +68,9 @@ export class AddMenuComponent implements OnInit, OnDestroy {
 
   save(): void {
     console.log(this.menuForm.value.menus);
-    this.promise = this.menuService.addMenu(this.restaurantName, this.menuForm.value.menus).subscribe(
+    this.menuSubscription = this.menuService.addMenu(this.restaurantName, this.menuForm.value.menus).subscribe(
       res => {
-
+        this.router.navigateByUrl("admin/restaurant/" + this.restaurantName);
       }, err => {
         console.log(err);
       }

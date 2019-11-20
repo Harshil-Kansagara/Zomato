@@ -27,7 +27,7 @@ h3 { color: #000; font-size: 32px; line-height: 40px; }*/
 
 .topnav a { color: white; font-weight: bold; font-size: 22px; text-decoration:none; margin-right:10px;}
 
-.topnav a:hover {text-decoration:underline;}
+.topnav a:hover {text-decoration:underline; cursor:pointer;}
 
 .middle-content { position: absolute; top: 43%; left: 50%; transform: translate(-50%,-70%); text-align: center; }
 

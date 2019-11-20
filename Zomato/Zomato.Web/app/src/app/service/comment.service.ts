@@ -14,7 +14,7 @@ export class CommentService {
   }
 
   addComment(comment: Comment) {
-    return this.http.post(this.baseUrl + comment.reviewId + "/comment", comment);
+    return this.http.post(this.baseUrl + "comment", comment);
   }
 
   initializeComment(): Comment {

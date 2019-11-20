@@ -4,12 +4,14 @@ import { Restaurant } from '../model/restaurant';
 import { Category } from '../model/category';
 import { Cuisine } from '../model/cuisine';
 import { Observable, of } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 
 export class RestaurantService {
 
   baseUrl: string = "api/restaurant/"
+  restaurant = [];
 
   constructor(private http: HttpClient) { }
 
@@ -19,8 +21,12 @@ export class RestaurantService {
     }
   }
 
+  checkRestaurant(restaurantName: string) {
+    return this.http.get(this.baseUrl + "restaurant/" + restaurantName);
+  }
+
   getRestaurantDetail(restaurantName: string) {
-    return this.http.get(this.baseUrl+'restaurant/' + restaurantName);
+    return this.http.get(this.baseUrl+ restaurantName);
   }
 
   getListRestaurantDetail() {
@@ -36,7 +42,7 @@ export class RestaurantService {
   }
 
   deleteRestaurant(restaurantId: number) {
-    return this.http.delete('api/Restaurant/delete/' + restaurantId);
+    return this.http.delete('api/Restaurant/' + restaurantId);
   }
 
   initializeRestaurant(): Restaurant {

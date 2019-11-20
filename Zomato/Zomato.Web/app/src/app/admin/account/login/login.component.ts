@@ -26,7 +26,9 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.promise.unsubscribe();
+    if (this.promise) {
+      this.promise.unsubscribe();
+    }
   }
 
   submit() {
@@ -36,7 +38,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         if (res != null) {
           let decode_token = jwt_decode(res.token);
           if (decode_token['UserRole'] == 'admin') {
-            localStorage.setItem('token', res.token);
+            localStorage.setItem('token_admin', res.token);
             //window.location.reload();
             this.toastr.success("Login Successful");
             window.location.href = "admin/restaurant";

@@ -11,7 +11,8 @@ namespace Zomato.DomainModel.Models
     {
         [Key]
         public int OrderId { get; set; }
-        public int RestauratnId { get; set; }
+
+        public int RestaurantId { get; set; }
         [ForeignKey("RestaurantId")]
         public Restaurant Restaurant { get; set; }
 
@@ -19,7 +20,7 @@ namespace Zomato.DomainModel.Models
         [ForeignKey("UserId")]
         public IdentityUser IdentityUser { get; set; }
 
-        public int UserAddressId { get; set; }
+        public int AddressId { get; set; }
         [ForeignKey("AddressId")]
         public UserAddress UserAddress { get; set; }
 

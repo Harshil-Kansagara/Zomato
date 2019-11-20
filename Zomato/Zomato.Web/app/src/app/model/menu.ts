@@ -1,6 +1,6 @@
 export interface Menu {
-  ItemId: number;
-  ItemName: string;
-  ItemPrice: number;
-  CuisineId: number;
+   ItemId: number;
+   ItemName: string;
+   ItemPrice: number;
+   CuisineId: number;
 }

@@ -3,10 +3,12 @@ import { Router } from '@angular/router';
 import { AccountService } from '../../service/account.service';
 import { ToastrService } from 'ngx-toastr';
 import { Register } from '../../model/register';
-import { Subscription } from 'rxjs';
+import { Subscription, Observable, of } from 'rxjs';
 import { Login } from '../../model/login';
 import * as jwt_decode from 'jwt-decode';
 import { RestaurantService } from '../../service/restaurant.service';
+import { startWith, map } from 'rxjs/operators';
+import { FormControl } from '@angular/forms';
 
 @Component({
   templateUrl: './home.component.html',
@@ -14,48 +16,68 @@ import { RestaurantService } from '../../service/restaurant.service';
 })
 
 export class HomeComponent implements OnInit, OnDestroy {
-  registerToken: boolean = false;
+  registerToken; userToken: boolean = false;
   register: Register;
   login: Login;
   promise: Subscription;
-  token: string;
-  decode_token: string;
-  userName: string;
+  token_user; decode_token; userName; searchText; userId: string= "";
   restaurantList: string[] = [];
-  searchText: string = "";
+  restaurants: any[];
+  restaurantCtrl: FormControl;
+  filteredRestaurants: Observable<any[]>;
 
-  constructor(private toastr: ToastrService, private accountService: AccountService, private restaurantService: RestaurantService,  private router: Router) { }
+  constructor(private toastr: ToastrService, private accountService: AccountService,
+    private restaurantService: RestaurantService, private router: Router) {
+    this.restaurantCtrl = new FormControl();
+  }
 
   ngOnInit() {
     this.register = this.accountService.intializeRegister();
     this.login = this.accountService.initializeLogin();
-    this.token = localStorage.getItem('token');
-    if (this.token != null) {
-      console.log("Token is not null: ", this.token);
-      this.decode_token = jwt_decode(this.token)
-      if (this.decode_token['UserRole'] == "user") {
-        this.userName = this.decode_token['UserName'];
-        console.log(this.userName);
-      }
-    } else {
-      console.log("Token is null");
-    }
-
+    this.checkUserLogin();
     this.loadRestaurantList();
   }
 
   ngOnDestroy(): void {
-    this.promise.unsubscribe();
+    if (this.promise) {
+      this.promise.unsubscribe();
+    }
+  }
+
+  checkUserLogin(): void {
+    this.token_user = localStorage.getItem('token_user');
+    if (this.token_user != null) {
+      console.log("Token is not null: ", this.token_user);
+      this.decode_token = jwt_decode(this.token_user)
+      if (this.decode_token['UserRole'] == "user") {
+        this.userName = this.decode_token['UserName'];
+        this.userId = this.decode_token['UserId'];
+        this.userToken = true;
+      } else {
+        this.userToken = false;
+      }
+    } else {
+      console.log("Token is null");
+    }
   }
 
   loadRestaurantList(): void {
     this.promise = this.restaurantService.getListRestaurantDetail().subscribe(
       res => {
         if (res != null) {
-          for (let i = 0; i < 6; i++) {
-            this.restaurantList.push(res[i]);
+          this.restaurants = res as any[];
+          for (let i = 0; i < this.restaurants.length; i++) {
+            if (i == 7) {
+              break;
+            }
+            this.restaurantList.push(this.restaurants[i]);
           }
-          console.log(this.restaurantList);
+          console.log(this.restaurants);
+          this.filteredRestaurants = this.restaurantCtrl.valueChanges
+            .pipe(
+              startWith(''),
+              map(res => res ? this.filterRestaurants(res) : this.restaurants.slice())
+            );
         }
       }, err => {
         console.log(err);
@@ -63,9 +85,19 @@ export class HomeComponent implements OnInit, OnDestroy {
     );
   }
 
+  filterRestaurants(name: string) {
+    return this.restaurants.filter(each =>
+      each.restaurant.restaurantName.toLowerCase().indexOf(name.toLowerCase()) === 0);
+  }
+
   search(): void {
-    console.log(this.searchText);
-    this.searchText = "";
+    this.promise = this.restaurantService.checkRestaurant(this.restaurantCtrl.value).subscribe(
+      res => {
+        this.router.navigateByUrl("restaurant/" + this.restaurantCtrl.value);
+      }, err => {
+        console.log(err);
+      }
+    );
   }
 
   reg(): void {
@@ -104,9 +136,10 @@ export class HomeComponent implements OnInit, OnDestroy {
           console.log(res.token);
           this.decode_token = jwt_decode(res.token);
           if (this.decode_token['UserRole'] == 'user') {
-            localStorage.setItem('token', res.token);
+            localStorage.setItem('token_user', res.token);
             window.location.reload();
             this.toastr.success("Login Successful");
+            this.userToken = true;
             //window.location.href = "admin/restaurant";
           } else {
             this.toastr.error("You don't have priviledge to access this page");
@@ -123,7 +156,19 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   logoutUser() {
-    localStorage.removeItem('token');
+    localStorage.removeItem('token_user');
     window.location.reload();
   }
+
+  restDetail(restaurantName: string): void {
+    this.router.navigateByUrl('restaurant/' + restaurantName);
+  }
+
+  navigateUserProfile(): void {
+    this.router.navigateByUrl("users/" + this.userName);
+  }
+
+  //hyphenateUrlParams(str: string) {
+  //  return str.replace(' ', '-');
+  //}
 }

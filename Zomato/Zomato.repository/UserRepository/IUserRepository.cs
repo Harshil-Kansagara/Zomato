@@ -16,5 +16,8 @@ namespace Zomato.Repository.UserRepository
         Task<IdentityUser> FindByEmail(string email);
         Task<IdentityResult> AddUserToRole(IdentityUser user, string roleName);
         Task<string> GetUserRole(User user);
+        Task<string> getUserRole(IdentityUser user);
+        Task<List<IdentityUser>> GetUserList();
+
     }
 }

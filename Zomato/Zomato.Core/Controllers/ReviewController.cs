@@ -25,7 +25,7 @@ namespace Zomato.Core.Controllers
         [Route("{restaurantName}/review")]
         public async Task<List<ReviewCollection>> GetReview (string restaurantName)
         {
-            restaurantName = restaurantName.Replace('-', ' ');
+            //restaurantName = restaurantName.Replace('-', ' ');
             var restaurantId = await _unitOfWork.RestaurantRepository.GetRestaurantIdByRestaurantName(restaurantName);
 
             List<ReviewCollection> reviewCollection = new List<ReviewCollection>();
@@ -35,9 +35,24 @@ namespace Zomato.Core.Controllers
             {
                 var model = new ReviewCollection();
                 model.Review = review;
-                model.UserName = _unitOfWork.UserRepository.GetUsernameByUserId(review.UserId).Result.UserName;
+
+                model.UserName =  _unitOfWork.UserRepository.GetUsernameByUserId(review.UserId).Result.UserName;
+
                 model.LikeCount = _unitOfWork.LikeRepository.GetLikeByReviewId(review.ReviewId).Result.Count;
-                model.CommentCount = _unitOfWork.CommentRepository.GetCommentByReviewId(review.ReviewId).Result.Count;
+
+                var comments = await _unitOfWork.CommentRepository.GetCommentByReviewId(review.ReviewId);
+
+                foreach (var comment in comments)
+                {
+                    var commentCollection = new CommentCollection();
+                    commentCollection.CommentId = comment.CommentId;
+                    commentCollection.CommentData = comment.CommentData;
+                    commentCollection.UserName = _unitOfWork.UserRepository.GetUsernameByUserId(comment.UserId).Result.UserName;
+
+                    model.Comments.Add(commentCollection);
+                }
+
+                model.CommentCount = comments.Count;
 
                 reviewCollection.Add(model);
             }
@@ -46,18 +61,40 @@ namespace Zomato.Core.Controllers
         }
 
         [HttpGet]
-        [Route("user/{userId}/review")]
-        public async Task<UserReviewCollection> GetReviewofUser(string userId)
+        [Route("user/{userId}")]
+        public async Task<List<ReviewCollection>> GetReviewofUser(string userId)
         {
-            UserReviewCollection userReviewCollection = new UserReviewCollection();
-            userReviewCollection.Reviews = await _unitOfWork.ReviewRepository.GetReviewByUserId(userId);
-            String restaurantName = null;
+            List<ReviewCollection> userReviewCollection = new List<ReviewCollection>();
 
-            for(int i=0; i<userReviewCollection.Reviews.Count;i++)
+            var reviewList = await _unitOfWork.ReviewRepository.GetReviewByUserId(userId);
+
+            foreach (var review in reviewList)
             {
-                restaurantName = await _unitOfWork.RestaurantRepository.GetRestaurantNameById(userReviewCollection.Reviews[i].RestaurantId);
-                userReviewCollection.UserReviewDataCollection.Add(new UserReviewDataCollection(userReviewCollection.Reviews[i].RestaurantId, restaurantName));
+                var model = new ReviewCollection();
+                model.Review = review;
+
+                model.RestaurantName = await _unitOfWork.RestaurantRepository.GetRestaurantNameById(review.RestaurantId);
+
+                model.LikeCount = _unitOfWork.LikeRepository.GetLikeByReviewId(review.ReviewId).Result.Count;
+
+                var comments = await _unitOfWork.CommentRepository.GetCommentByReviewId(review.ReviewId);
+
+                foreach (var comment in comments)
+                {
+                    var commentCollection = new CommentCollection();
+                    commentCollection.CommentId = comment.CommentId;
+                    commentCollection.CommentData = comment.CommentData;
+                    commentCollection.UserName = _unitOfWork.UserRepository.GetUsernameByUserId(comment.UserId).Result.UserName;
+
+                    model.Comments.Add(commentCollection);
+                }
+
+
+                model.CommentCount = model.Comments.Count;
+
+                userReviewCollection.Add(model);
             }
+
             return userReviewCollection;
         }
 
@@ -66,14 +103,30 @@ namespace Zomato.Core.Controllers
         public async Task<IActionResult> AddReview(string restaurantName, Review newReview)
         {
             if (ModelState.IsValid) { 
-                restaurantName = restaurantName.Replace('-', ' ');
+                //restaurantName = restaurantName.Replace('-', ' ');
                 var restaurantId = await _unitOfWork.RestaurantRepository.GetRestaurantIdByRestaurantName(restaurantName);
                 newReview.RestaurantId = restaurantId;
                 Review review = await _unitOfWork.ReviewRepository.AddReview(newReview);
                 _unitOfWork.commit();
-                return Ok();
+                return Ok(review);
             }
             return BadRequest();
+        }
+
+        [HttpDelete]
+        [Route("{reviewId}")]
+        public async Task DeleteReview(int reviewId)
+        {
+            try
+            {
+                await _unitOfWork.LikeRepository.DeleteLikeByReview(reviewId);
+                await _unitOfWork.CommentRepository.DeleteComment(reviewId);
+                await _unitOfWork.ReviewRepository.DeleteReview(reviewId);
+                _unitOfWork.commit();
+            }catch(Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }

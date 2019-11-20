@@ -13,6 +13,12 @@ namespace Zomato.DomainModel.Models
         public string UserNumber { get; set; }
         public string UserEmail { get; set; }
         public string DeliveryLocation { get; set; }
+        public int TotalAmount { get; set; }
         public List<ItemDetail> ItemDetail { get; set; }
+
+        public OrderDetail()
+        {
+            ItemDetail = new List<ItemDetail>();
+        }
     }
 }

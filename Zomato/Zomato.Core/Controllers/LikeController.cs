@@ -37,12 +37,28 @@ namespace Zomato.Core.Controllers
         }
 
         [HttpPost]
-        [Route("review/{reviewId}/like")]
+        [Route("like")]
         public async Task<IActionResult> AddLike (Like newLike)
         {
-            Like like = await _unitOfWork.LikeRepository.AddLike(newLike);
-            _unitOfWork.commit();
-            return Ok();
+            if (ModelState.IsValid)
+            {
+                var likeList = await _unitOfWork.LikeRepository.GetLikeByReviewId(newLike.ReviewId);
+                foreach (var like in likeList)
+                {
+                    if(like.UserId == newLike.UserId)
+                    {
+                        var likeId = like.LikeId;
+                        await _unitOfWork.LikeRepository.DeleteLike(likeId);
+                        _unitOfWork.commit();
+                        return Ok();
+                    }
+                }
+
+                var l = await _unitOfWork.LikeRepository.AddLike(newLike);
+                _unitOfWork.commit();
+                return Ok(l);
+            }
+            return BadRequest();
         }
     }
 }

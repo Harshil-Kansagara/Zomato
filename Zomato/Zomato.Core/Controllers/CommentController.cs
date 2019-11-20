@@ -28,7 +28,8 @@ namespace Zomato.Core.Controllers
             foreach (var comment in commentList)
             {
                 var model = new CommentCollection();
-                model.Comment = comment;
+                model.CommentId = comment.CommentId;
+                model.CommentData = comment.CommentData;
                 model.UserName = _unitOfWork.UserRepository.GetUsernameByUserId(comment.UserId).Result.UserName;
                 commentCollection.Add(model);
             }
@@ -36,13 +37,13 @@ namespace Zomato.Core.Controllers
         }
 
         [HttpPost]
-        [Route("{reviewId}/comment")]
+        [Route("comment")]
         public async Task<IActionResult> AddComment(int reviewId,Comment comment)
         {
             if (ModelState.IsValid) { 
-                await _unitOfWork.CommentRepository.AddComment(comment);
+                var a = await _unitOfWork.CommentRepository.AddComment(comment);
                 _unitOfWork.commit();
-                return Ok();
+                return Ok(a);
             }
             return BadRequest();
         }

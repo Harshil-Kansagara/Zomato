@@ -53,7 +53,7 @@ namespace Zomato.Core.Controllers
 
                 for (int i = 0; i < _restCuisine.Count; i++)
                 {
-                    model.Cuisines.Add(await _unitOfWork.CuisineRepository.GetCuisineById(_restCuisine[i].CuisineId));
+                    model.Cuisines.Add(_unitOfWork.CuisineRepository.GetCuisineById(_restCuisine[i].CuisineId).Result.CuisineName);
                 }
 
                 var _restLocation = await _unitOfWork.RestLocationRepository.GetRestLocationById(restaurantId);

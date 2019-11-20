@@ -30,23 +30,40 @@ namespace Zomato.Core.Controllers
         public async Task<IActionResult> AddAddress (UserAddress newUserAddress)
         {
             if (ModelState.IsValid) {
-                var userAddressList = _unitOfWork.UserAddressRepository.GetAddressList(newUserAddress.UserId).Result;
-                foreach (var each in userAddressList)
-                {
-                    if (each.Address == newUserAddress.Address)
+                if (newUserAddress.AddressId == 0) { 
+                    var userAddressList = _unitOfWork.UserAddressRepository.GetAddressList(newUserAddress.UserId).Result;
+                    foreach (var each in userAddressList)
                     {
-                        return BadRequest();
+                        if (each.Address == newUserAddress.Address)
+                        {
+                            return BadRequest();
+                        }
                     }
+                    await _unitOfWork.UserAddressRepository.AddAddress(newUserAddress);
+                    _unitOfWork.commit();
+                    return Ok();
                 }
-                await _unitOfWork.UserAddressRepository.AddAddress(newUserAddress);
-                _unitOfWork.commit();
-                return Ok();
+                else
+                {
+                    var userAddressList = _unitOfWork.UserAddressRepository.GetAddressList(newUserAddress.UserId).Result;
+                    foreach (var each in userAddressList)
+                    {
+                        if (each.Address == newUserAddress.Address)
+                        {
+                            return BadRequest();
+                        }
+                    }
+                    await _unitOfWork.UserAddressRepository.EditAddress(newUserAddress);
+                    _unitOfWork.commit();
+                    return Ok();
+
+                }
             }
             return BadRequest();
         }
 
         [HttpDelete]
-        [Route("address/{addressId}")]
+        [Route("{addressId}")]
         public async Task DeleteAddress(int addressId)
         {
             try

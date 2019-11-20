@@ -22,15 +22,6 @@ namespace Zomato.Core.Controllers
         }
 
         [HttpGet]
-        [Route("category")]
-        public async Task<List<Category>> CategoryList()
-        {
-            return await _unitOfWork.CategoryRepository.CategoryList();
-        }
-
-        
-
-        [HttpGet]
         [Route("restaurant")]
         public async Task<List<RestaurantCollection>> Index()
         {
@@ -38,8 +29,9 @@ namespace Zomato.Core.Controllers
             List<RestaurantCollection> _restaurantCollection = new List<RestaurantCollection>();
             var restaurantList = await _unitOfWork.RestaurantRepository.ListRestaurant();
 
-            foreach(var restaurant in restaurantList)
+            foreach (var restaurant in restaurantList)
             {
+                var totalRating = 0;
                 var model = new RestaurantCollection();
                 model.Restaurant = restaurant;
 
@@ -54,7 +46,7 @@ namespace Zomato.Core.Controllers
 
                 for (int i = 0; i < _restCuisine.Count; i++)
                 {
-                    model.Cuisines.Add(await _unitOfWork.CuisineRepository.GetCuisineById(_restCuisine[i].CuisineId));
+                    model.Cuisines.Add(_unitOfWork.CuisineRepository.GetCuisineById(_restCuisine[i].CuisineId).Result.CuisineName);
                 }
 
                 var _restLocation = await _unitOfWork.RestLocationRepository.GetRestLocationById(restaurant.RestaurantId);
@@ -64,6 +56,20 @@ namespace Zomato.Core.Controllers
                     model.RestaurantLocation.Add(_restLocation[i].Location);
                 }
 
+                var _restReviews = await _unitOfWork.ReviewRepository.GetReviewByRestaurantId(restaurant.RestaurantId);
+
+                if (_restReviews.Count != 0) {
+                    foreach (var review in _restReviews)
+                    {
+                        totalRating += review.rating;
+                    }
+
+                    model.RatingAvg = (double)totalRating / _restReviews.Count;
+                }
+                else
+                {
+                    model.RatingAvg = 0.00;
+                }
                 _restaurantCollection.Add(model);
             }
 
@@ -79,19 +85,23 @@ namespace Zomato.Core.Controllers
 
         [HttpGet]
         [Route("restaurant/{restaurantName}")]
+        public async Task<IActionResult> CheckRestaurant(string restaurantName)
+        {
+            var restaurantId = await _unitOfWork.RestaurantRepository.GetRestaurantIdByRestaurantName(restaurantName);
+            if(restaurantId == 0)
+            {
+                return BadRequest();
+            }
+            return Ok();
+        }
+
+        [HttpGet]
+        [Route("{restaurantName}")]
         public async Task<RestaurantCollection> Detail(string restaurantName)
         {
-            var restaurantId = 0;
+            var totalRating = 0;
 
-            List<Restaurant> restaurant = await _unitOfWork.RestaurantRepository.ListRestaurant();
-
-            for (int i = 0; i < restaurant.Count; i++)
-            {
-                if (restaurant[i].RestaurantName == restaurantName)
-                {
-                    restaurantId = restaurant[i].RestaurantId;
-                }
-            }
+            var restaurantId = await _unitOfWork.RestaurantRepository.GetRestaurantIdByRestaurantName(restaurantName);
 
             RestaurantCollection _restaurantCollection = new RestaurantCollection();
 
@@ -103,6 +113,8 @@ namespace Zomato.Core.Controllers
 
             var _restLocation = await _unitOfWork.RestLocationRepository.GetRestLocationById(restaurantId);
 
+            var _restReviews = await _unitOfWork.ReviewRepository.GetReviewByRestaurantId(restaurantId);
+
             for (int i = 0; i < _restCategory.Count; i++)
             {
                 _restaurantCollection.Categories.Add(await _unitOfWork.CategoryRepository.GetCategoryById(_restCategory[i].CategoryId));
@@ -110,7 +122,7 @@ namespace Zomato.Core.Controllers
 
             for (int i = 0; i < _restCuisine.Count; i++)
             {
-                _restaurantCollection.Cuisines.Add(await _unitOfWork.CuisineRepository.GetCuisineById(_restCuisine[i].CuisineId));
+                _restaurantCollection.Cuisines.Add(_unitOfWork.CuisineRepository.GetCuisineById(_restCuisine[i].CuisineId).Result.CuisineName);
             }
 
             for (int i = 0; i < _restLocation.Count; i++)
@@ -118,6 +130,19 @@ namespace Zomato.Core.Controllers
                 _restaurantCollection.RestaurantLocation.Add(_restLocation[i].Location);
             }
 
+            if (_restReviews.Count != 0)
+            {
+                foreach (var review in _restReviews)
+                {
+                    totalRating += review.rating;
+                }
+
+                _restaurantCollection.RatingAvg = (double)totalRating / _restReviews.Count;
+            }
+            else
+            {
+                _restaurantCollection.RatingAvg = 0.00;
+            }
             return _restaurantCollection;
         }
 
@@ -175,12 +200,29 @@ namespace Zomato.Core.Controllers
         }
 
         [HttpDelete]
-        [Route("delete/{restaurantId}")]
+        [Route("{restaurantId}")]
         public async Task DeleteConfirm(int restaurantId)
         {
             try
             {
                 await _unitOfWork.RestaurantRepository.deleteRestaurant(restaurantId);
+                await _unitOfWork.MenuRepository.DeleteMenuByRestaurantId(restaurantId);
+                await _unitOfWork.OrderRepository.DeleteOrderByRestaurant(restaurantId);
+                var reviewList = await _unitOfWork.ReviewRepository.GetReviewByRestaurantId(restaurantId);
+                foreach (var each in reviewList)
+                {
+                    var commentList = await _unitOfWork.CommentRepository.GetCommentByReviewId(each.ReviewId);
+                    var likeList = await _unitOfWork.LikeRepository.GetLikeByReviewId(each.ReviewId);
+                    await _unitOfWork.ReviewRepository.DeleteReview(each.ReviewId);
+                    foreach (var comment in commentList)
+                    {
+                        await _unitOfWork.CommentRepository.DeleteComment(comment.CommentId);
+                    }
+                    foreach (var like in likeList)
+                    {
+                        await _unitOfWork.LikeRepository.DeleteLike(like.LikeId);
+                    }
+                }
                 _unitOfWork.commit();
             }
             catch (Exception ex)

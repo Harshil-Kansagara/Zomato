@@ -10,5 +10,7 @@ namespace Zomato.Repository.LikeRepository
     {
         Task<List<Like>> GetLikeByReviewId(int reviewId);
         Task<Like> AddLike(Like like);
+        Task DeleteLike(int likeId);
+        Task DeleteLikeByReview(int reviewId);
     }
 }

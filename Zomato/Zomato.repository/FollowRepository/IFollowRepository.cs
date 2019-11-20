@@ -8,8 +8,10 @@ namespace Zomato.Repository.FollowRepository
 {
     public interface IFollowRepository
     {
-        Task<List<Follow>> GetFollowersByUserId(string userId);
-        Task<List<Follow>> GetFollowingFromFollowerId(string userId);
+        Task<List<Follow>> GetFollowList();
+        Task<List<Follow>> GetFollowingByUserId(string userId);
+        Task<List<Follow>> GetFollowerByUserId(string userId);
         Task<Follow> AddFollower(Follow follow);
+        Task RemoveFollower(string followerId);
     }
 }

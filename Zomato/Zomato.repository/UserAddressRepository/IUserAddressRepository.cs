@@ -10,6 +10,8 @@ namespace Zomato.Repository.UserAddressRepository
     {
         Task<List<UserAddress>> GetAddressList(string userId);
         Task<UserAddress> AddAddress(UserAddress userAddress);
+        Task<string> GetAddressNameById(int addressId);
         Task deleteAddress(int addressId);
+        Task EditAddress(UserAddress userAddress);
     }
 }

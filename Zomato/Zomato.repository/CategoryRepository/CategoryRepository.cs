@@ -28,5 +28,11 @@ namespace Zomato.Repository.CategoryRepository
             var category = await _db.Category.Where(x => x.CategoryId == categoryId).FirstAsync();
             return category.CategoryName;
         }
+
+        public async Task<int> GetCategoryIdByName(string categoryName)
+        {
+            var category = await _db.Category.Where(x => x.CategoryName == categoryName).FirstOrDefaultAsync();
+            return category.CategoryId;
+        }
     }
 }

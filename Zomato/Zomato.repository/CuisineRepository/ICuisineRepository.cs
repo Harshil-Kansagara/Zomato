@@ -8,7 +8,7 @@ namespace Zomato.Repository.CuisineRepository
 {
     public interface ICuisineRepository
     {
-        Task<string> GetCuisineById(int cuisineId);
+        Task<Cuisine> GetCuisineById(int cuisineId);
         Task<List<Cuisine>> CuisineList();
     }
 }

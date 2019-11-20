@@ -10,6 +10,7 @@ namespace Zomato.DomainModel.Models
         public List<string> RestaurantLocation { get; set; }
         public List<string> Cuisines { get; set; }
         public List<string> Categories { get; set; }
+        public double RatingAvg { get; set; }
 
         public RestaurantCollection()
         {

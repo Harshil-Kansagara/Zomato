@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, Inject, ViewChild } from "@angular/core";
 import { RestaurantService } from '../../../service/restaurant.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Restaurant } from '../../../model/restaurant';
-import { Subscription } from 'rxjs';
+import { Subscription, interval } from 'rxjs';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatSidenav } from '@angular/material';
 import { UserAddress } from '../../../model/userAddress';
 import { UserAddressService } from '../../../service/user-address.service';
@@ -17,41 +17,36 @@ import * as jwt_decode from 'jwt-decode';
 export class DetailRestaurantUserComponent implements OnInit, OnDestroy {
   restaurantName: string;
   restaurantDetail: Restaurant;
-  promise: Subscription;
-  cuisine: string = '';
-  location: string = '';
-  token: string;
-  decode_token: string;
-  userId: string;
+  resturantSubscription; updateRestaurantDataSubscription: Subscription;
+  cuisine; location; token_user; decode_token; userId: string = '';
   addressList: UserAddress[];
   navLinks: any[];
   activeLinkIndex = -1;
 
   constructor(private router: Router, private restaurantService: RestaurantService, public dialog: MatDialog,
-    private activiateRoute: ActivatedRoute, private toastr: ToastrService,
-    private userAddressService: UserAddressService) {
+    private activiateRoute: ActivatedRoute, private toastr: ToastrService) {
 
     this.activiateRoute.params.subscribe(params => {
       this.restaurantName = params.restaurantName;
     });
-    this.restaurantName = this.restaurantName.replace('-', ' ');
+    //this.restaurantName = this.restaurantName.replace('-', ' ');
     this.navLinks = [
       {
         label: 'Menu',
-        link: './menu',
+        link: 'menu',
         index: 0
       }, {
         label: 'Review',
-        link: './review',
+        link: 'review',
         index: 1
       }
     ]
   }
 
   ngOnInit(): void {
-    this.token = localStorage.getItem('token');
-    if (this.token != null) {
-      this.decode_token = jwt_decode(this.token)
+    this.token_user = localStorage.getItem('token_admin');
+    if (this.token_user != null) {
+      this.decode_token = jwt_decode(this.token_user)
       this.userId = this.decode_token['UserId'];
     }
     this.router.events.subscribe((res) => {
@@ -59,41 +54,25 @@ export class DetailRestaurantUserComponent implements OnInit, OnDestroy {
     });
     this.restaurantDetail = this.restaurantService.initializeRestaurant();
     this.restaurantData();
-    this.addressDataList();
+    this.updateRestaurantDataSubscription = interval(10000).subscribe(
+      (val) => {
+        this.restaurantData();
+      }
+    );
+    //this.addressDataList();
   }
 
   restaurantData(): void {
-    this.promise = this.restaurantService.getRestaurantDetail(this.restaurantName).subscribe(
+    this.resturantSubscription = this.restaurantService.getRestaurantDetail(this.restaurantName).subscribe(
       res => {
         if (res != null) {
           this.restaurantDetail = res as Restaurant;
+          console.log(this.restaurantDetail);
         }
       }, err => {
         console.log(err);
       }
     );
-  }
-
-  addressDataList(): void {
-    this.promise = this.userAddressService.getUserAddressList(this.userId).subscribe(
-      res => {
-        if (res != null) {
-          this.addressList = res as UserAddress[];
-        }
-      }, err => {
-        console.log(err);
-      }
-    );
-  }
-
-  checkUserLogin(): void {
-    if (this.token != null) {
-      this.openAddDialog();
-    }
-    else {
-      console.log("Token is null");
-      this.toastr.error("Please Login first !");
-    }
   }
 
   addAddress(addressName: string) {
@@ -101,46 +80,73 @@ export class DetailRestaurantUserComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.promise.unsubscribe();
+    if (this.resturantSubscription) {
+      this.resturantSubscription.unsubscribe();
+    }
+    if (this.updateRestaurantDataSubscription) {
+      this.updateRestaurantDataSubscription.unsubscribe();
+    }
   }
 
-  openAddDialog(): void {
-    const dialogRef = this.dialog.open(addUserAddressDialogComponent, {
-      width: '250px'
-    });
+  //addressDataList(): void {
+  //  this.promise = this.userAddressService.getUserAddressList(this.userId).subscribe(
+  //    res => {
+  //      if (res != null) {
+  //        this.addressList = res as UserAddress[];
+  //      }
+  //    }, err => {
+  //      console.log(err);
+  //    }
+  //  );
+  //}
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result != null) {
-        result.UserId = this.userId;
-        console.log(result);
-        this.promise = this.userAddressService.addUserAddress(result).subscribe(
-          res => {
-              this.addressDataList();
-          }, err => {
-            if (err.status == 400) {
-              this.toastr.error("Location Already exists");
-            } else {
-              console.log(err);
-            }
-          }
-        );
-      }
-    });
-  }
+  //checkUserLogin(): void {
+  //  if (this.token != null) {
+  //    this.openAddDialog();
+  //  }
+  //  else {
+  //    console.log("Token is null");
+  //    this.toastr.error("Please Login first !");
+  //  }
+  //}
+
+  //openAddDialog(): void {
+  //  const dialogRef = this.dialog.open(addUserAddressDialogComponent, {
+  //    width: '250px'
+  //  });
+
+  //  dialogRef.afterClosed().subscribe(result => {
+  //    if (result != null) {
+  //      result.UserId = this.userId;
+  //      console.log(result);
+  //      this.promise = this.userAddressService.addUserAddress(result).subscribe(
+  //        res => {
+  //           // this.addressDataList();
+  //        }, err => {
+  //          if (err.status == 400) {
+  //            this.toastr.error("Location Already exists");
+  //          } else {
+  //            console.log(err);
+  //          }
+  //        }
+  //      );
+  //    }
+  //  });
+  //}
 }
 
-@Component({
-  templateUrl: 'dialog-add-location.component.html'
-})
+//@Component({
+//  templateUrl: 'dialog-add-location.component.html'
+//})
 
-export class addUserAddressDialogComponent{
+//export class addUserAddressDialogComponent{
 
-  constructor(private dialogRef: MatDialogRef<addUserAddressDialogComponent>, @Inject(MAT_DIALOG_DATA) public data: UserAddress,
-    private addressService: UserAddressService) {
-    this.data = this.addressService.initializeUserAddress();
-  }
+//  constructor(private dialogRef: MatDialogRef<addUserAddressDialogComponent>, @Inject(MAT_DIALOG_DATA) public data: UserAddress,
+//    private addressService: UserAddressService) {
+//    this.data = this.addressService.initializeUserAddress();
+//  }
 
-  onNoClick(): void {
-    this.dialogRef.close();
-  }
-}
+//  onNoClick(): void {
+//    this.dialogRef.close();
+//  }
+//}

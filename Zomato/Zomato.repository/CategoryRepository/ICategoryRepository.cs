@@ -10,5 +10,6 @@ namespace Zomato.Repository.CategoryRepository
     {
         Task<string> GetCategoryById(int categoryId);
         Task<List<Category>> CategoryList();
+        Task<int> GetCategoryIdByName(string categoryName);
     }
 }

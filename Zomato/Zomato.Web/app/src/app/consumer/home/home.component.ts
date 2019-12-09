@@ -9,6 +9,8 @@ import * as jwt_decode from 'jwt-decode';
 import { RestaurantService } from '../../service/restaurant.service';
 import { startWith, map } from 'rxjs/operators';
 import { FormControl } from '@angular/forms';
+import { HubConnection } from '@aspnet/signalr';
+import * as signalR from '@aspnet/signalr';
 
 @Component({
   templateUrl: './home.component.html',
@@ -72,7 +74,7 @@ export class HomeComponent implements OnInit, OnDestroy {
             }
             this.restaurantList.push(this.restaurants[i]);
           }
-          console.log(this.restaurants);
+          //console.log(this.restaurants);
           this.filteredRestaurants = this.restaurantCtrl.valueChanges
             .pipe(
               startWith(''),

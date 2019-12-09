@@ -50,7 +50,6 @@ export class OrderConfirmComponent implements OnInit, OnDestroy{
       res => {
         if (res != null) {
           this.orderDetail = res as OrderDetail;
-          console.log(this.orderDetail);
           for (let each of this.orderDetail.itemDetail) {
             this.itemCount = this.itemCount + each.itemQuantity;
           }

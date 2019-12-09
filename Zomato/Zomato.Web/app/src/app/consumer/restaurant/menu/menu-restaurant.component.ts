@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from "@angular/core";
 import { MenuService } from '../../../service/menu.service';
-import { Subscription, Observable, Observer } from 'rxjs';
+import { Subscription, Observable, Observer, interval } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Menu } from '../../../model/menu';
 import { CartService } from '../../../service/cart.service';
@@ -18,7 +18,7 @@ export class MenuComponent implements OnInit, OnDestroy {
   cart: Observable<ShoppingCart>
   cartItems: ICartItemWithItems[];
   menus: any[]=[];
-  cartSubscription; menuSubscription: Subscription;
+  cartSubscription; menuSubscription; updateMenuSubscription: Subscription;
   menuList: any[];
   restaurantName: string;
   public itemCount: number;
@@ -32,6 +32,11 @@ export class MenuComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.loadMenuList();
     this.loadCart();
+    this.updateMenuSubscription = interval(10000).subscribe(
+      (val) => {
+        this.loadMenuList();
+      }
+    );
   }
 
   ngOnDestroy(): void {
@@ -40,6 +45,9 @@ export class MenuComponent implements OnInit, OnDestroy {
     }
     if (this.cartSubscription) {
       this.cartSubscription.unsubscribe();
+    }
+    if (this.updateMenuSubscription) {
+      this.updateMenuSubscription.unsubscribe();
     }
   }
 
@@ -53,7 +61,7 @@ export class MenuComponent implements OnInit, OnDestroy {
               this.menus.push(menu);
             }
           }
-          console.log(this.menuList);
+          //console.log(this.menuList);
         }
       }, err => {
         console.log(err);

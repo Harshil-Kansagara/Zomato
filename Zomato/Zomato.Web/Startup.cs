@@ -35,6 +35,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Zomato.DomainModel.Models;
+using Zomato.Repository.NotificationRepository;
+using Microsoft.AspNetCore.SignalR;
+using Zomato.Repository;
 
 namespace Zomato.Web
 {
@@ -77,7 +80,6 @@ namespace Zomato.Web
             services.AddScoped<IUserAddressRepository, UserAddressRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
 
-
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("ZomatoDb"), 
@@ -88,6 +90,18 @@ namespace Zomato.Web
             services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddDefaultUI(UIFramework.Bootstrap4)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            services.AddCors(o => o.AddPolicy("CorsPolicy", builder => {
+                builder
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials()
+                .WithOrigins("http://localhost:59227");
+            }));
+
+            //var idProvider = new CustomUserIdProvider();
+
+            //GlobalHost.DependencyResolver.Register(typeof(IUserIdProvider), () => idProvider);
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
@@ -110,7 +124,28 @@ namespace Zomato.Web
                     ValidateAudience = false,
                     ClockSkew = TimeSpan.Zero
                 };
+
+                x.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        var accessToken = context.Request.Query["access_token"];
+
+                        // If the request is for our hub...
+                        var httpContextRequestPath = context.HttpContext.Request.Path;
+                        if (!string.IsNullOrEmpty(accessToken) &&
+                            (httpContextRequestPath.StartsWithSegments("/notify")))
+                        {
+                            // Read the token out of the query string
+                            context.Token = accessToken;
+                        }
+                        return Task.CompletedTask;
+                    }
+                };
             });
+
+            services.AddSignalR();
+           // services.AddSingleton<IUserIdProvider, NameUserIdProvider>();
 
         }
 
@@ -128,6 +163,14 @@ namespace Zomato.Web
             app.UseCookiePolicy();
 
             app.UseAuthentication();
+
+            app.UseCors("CorsPolicy");
+
+            app.UseSignalR(routes =>
+            {
+                //routes.MapHub<OrderHub>("/OrderHub");
+                routes.MapHub<NotifyHub>("/notify");
+            });
 
             app.UseMvc();
             app.UseSpa(spa =>

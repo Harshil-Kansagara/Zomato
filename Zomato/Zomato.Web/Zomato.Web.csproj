@@ -176,6 +176,7 @@
     <TypeScriptCompile Include="app\src\app\service\follow.service.ts" />
     <TypeScriptCompile Include="app\src\app\service\like.service.ts" />
     <TypeScriptCompile Include="app\src\app\service\menu.service.ts" />
+    <TypeScriptCompile Include="app\src\app\service\order-notification.service.ts" />
     <TypeScriptCompile Include="app\src\app\service\order.service.ts" />
     <TypeScriptCompile Include="app\src\app\service\rest-category.service.ts" />
     <TypeScriptCompile Include="app\src\app\service\rest-cuisines.service.ts" />

@@ -1,7 +1,7 @@
 {
   "runtimeTarget": {
     "name": ".NETCoreApp,Version=v2.2",
-    "signature": "e61de95af0bd6911120d7d53481a836a6c5a35d8"
+    "signature": "f1f37724e49b5f0c3ddfba1b36783571e3f50e4a"
   },
   "compilationOptions": {},
   "targets": {
@@ -15,6 +15,7 @@
           "Zomato.Core.dll": {}
         }
       },
+      "Microsoft.AspNet.SignalR/2.4.1": {},
       "Microsoft.AspNet.WebApi.Core/5.2.3": {
         "runtime": {
           "lib/net45/System.Web.Http.dll": {
@@ -30,6 +31,7 @@
       },
       "Zomato.Repository/1.0.0": {
         "dependencies": {
+          "Microsoft.AspNet.SignalR": "2.4.1",
           "Zomato.DomainModel": "1.0.0"
         },
         "runtime": {
@@ -43,6 +45,13 @@
       "type": "project",
       "serviceable": false,
       "sha512": ""
+    },
+    "Microsoft.AspNet.SignalR/2.4.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-aYbLVE5toZwv/qaQ0BiIZRRwN/00WKYzGjaYUWIQuI91xZ50nnAymWD1sxCZFN9XXDRq8bevM5ET9GmAeOI/Nw==",
+      "path": "microsoft.aspnet.signalr/2.4.1",
+      "hashPath": "microsoft.aspnet.signalr.2.4.1.nupkg.sha512"
     },
     "Microsoft.AspNet.WebApi.Core/5.2.3": {
       "type": "package",

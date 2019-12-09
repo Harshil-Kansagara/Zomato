@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Zomato.DomainModel.Models;
+using Zomato.Repository.NotificationRepository;
 using Zomato.Repository.UnitofWork;
 
 namespace Zomato.Core.Controllers
@@ -14,10 +16,12 @@ namespace Zomato.Core.Controllers
     public class OrderController : ControllerBase
     {
         private IUnitOfWork _unitOfWork;
-
-        public OrderController(IUnitOfWork unitOfWork)
+        private IHubContext<NotifyHub, ITypedHubClient> _hubContext;
+        
+        public OrderController(IUnitOfWork unitOfWork, IHubContext<NotifyHub, ITypedHubClient> hubContext)
         {
             _unitOfWork = unitOfWork;
+            _hubContext = hubContext;
         }
 
         [HttpPost]
@@ -46,6 +50,15 @@ namespace Zomato.Core.Controllers
                     _unitOfWork.commit();
                 }
 
+                try
+                {
+                    //await _hubContext.Clients.User("4aa56cd4-3ac4-4be0-af99-5933372d8a22").BroadcastMessage(order);
+                    await _hubContext.Clients.All.BroadcastMessage(order);
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
                 return Ok(order);
             }
             return BadRequest();
@@ -63,7 +76,6 @@ namespace Zomato.Core.Controllers
             order = await _unitOfWork.OrderRepository.GetOrderDataByOrderId(orderId);
             IdentityUser user = await _unitOfWork.UserRepository.GetUserDetail(order.UserId);
             List<OrderedItem> orderedItem = await _unitOfWork.OrderedItemRepository.GetOrderedItemByOrderId(order.OrderId);
-
 
             for (int i = 0; i < orderedItem.Count; i++)
             {
@@ -162,10 +174,8 @@ namespace Zomato.Core.Controllers
 
                 orderDetails.Add(orderDetail);
             }
-
             return orderDetails;
         }
-
 
         [HttpDelete]
         [Route("{orderId}")]

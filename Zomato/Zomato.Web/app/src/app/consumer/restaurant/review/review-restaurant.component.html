@@ -21,7 +21,7 @@
     <hr />
     <mat-card-content *ngFor="let reviews of reviewList">
       <h5><b>{{reviews.userName}}</b></h5>
-        <bar-rating name="rating" [rate]="reviews.review.rating" [max]="5" disabled></bar-rating>
+        <bar-rating name="rating" [rate]="reviews.review.rating" [max]="5" disabled="true"></bar-rating>
         <p>{{reviews.review.reviewData}}</p>
         <p>Total Likes:{{reviews.likeCount}}</p>
         <p>Totla Comments: {{reviews.commentCount}}</p>

@@ -67,7 +67,7 @@ export class DetailRestaurantUserComponent implements OnInit, OnDestroy {
       res => {
         if (res != null) {
           this.restaurantDetail = res as Restaurant;
-          console.log(this.restaurantDetail);
+          //console.log(this.restaurantDetail);
         }
       }, err => {
         console.log(err);

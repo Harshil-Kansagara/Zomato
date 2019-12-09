@@ -10,6 +10,7 @@ import { Debuger } from './service/debug.service';
 import { ToastrModule } from 'ngx-toastr';
 import { AdminComponent } from './admin/admin.component';
 import { MatButtonModule, MatIconModule } from '@angular/material';
+import { OrderNotificationService } from './service/order-notification.service';
 
 
 @NgModule({
@@ -28,7 +29,7 @@ import { MatButtonModule, MatIconModule } from '@angular/material';
     }),
     AppRoutingModule
   ],
-  providers: [Debuger],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

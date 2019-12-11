@@ -78,7 +78,8 @@ namespace Zomato.Core.Controllers
                                  new Claim("UserId", userData.Id.ToString()),
                                   new Claim("UserName", userData.UserName.ToString()),
                                   new Claim("UserRole", "user"),
-                                  new Claim(ClaimTypes.Name, userData.Id.ToString())
+                                  new Claim(ClaimTypes.Name, userData.Id.ToString()),
+                                  new Claim(ClaimTypes.Role, "user")
                         };
                         var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_appSettings.JWT_Secret));
                         var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256Signature);

@@ -134,7 +134,7 @@ namespace Zomato.Web
                         // If the request is for our hub...
                         var httpContextRequestPath = context.HttpContext.Request.Path;
                         if (!string.IsNullOrEmpty(accessToken) &&
-                            (httpContextRequestPath.StartsWithSegments("/notify")))
+                            (httpContextRequestPath.StartsWithSegments("/OrderHub")))
                         {
                             // Read the token out of the query string
                             context.Token = accessToken;
@@ -168,8 +168,8 @@ namespace Zomato.Web
 
             app.UseSignalR(routes =>
             {
-                //routes.MapHub<OrderHub>("/OrderHub");
-                routes.MapHub<NotifyHub>("/notify");
+                routes.MapHub<OrderHub>("/OrderHub");
+                //routes.MapHub<NotifyHub>("/notify");
             });
 
             app.UseMvc();

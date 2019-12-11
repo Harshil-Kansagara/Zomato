@@ -50,15 +50,15 @@ namespace Zomato.Core.Controllers
                     _unitOfWork.commit();
                 }
 
-                try
-                {
-                    //await _hubContext.Clients.User("4aa56cd4-3ac4-4be0-af99-5933372d8a22").BroadcastMessage(order);
-                    await _hubContext.Clients.All.BroadcastMessage(order);
-                }
-                catch (Exception ex)
-                {
-                    throw ex;
-                }
+                //try
+                //{
+                //    //await _hubContext.Clients.User("4aa56cd4-3ac4-4be0-af99-5933372d8a22").BroadcastMessage(order);
+                //    await _hubContext.Clients.All.BroadcastMessage(order);
+                //}
+                //catch (Exception ex)
+                //{
+                //    throw ex;
+                //}
                 return Ok(order);
             }
             return BadRequest();

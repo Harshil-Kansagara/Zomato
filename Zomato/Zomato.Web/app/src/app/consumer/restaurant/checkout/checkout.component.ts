@@ -33,7 +33,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
   constructor(private menuService: MenuService, private router: Router, private toastr: ToastrService,
     private cartService: CartService, public userAddressService: UserAddressService,
-    public dialog: MatDialog, private orderService: OrderService) {//, private orderNotificationService: OrderNotificationService) {
+    public dialog: MatDialog, private orderService: OrderService, private orderNotificationService: OrderNotificationService) {
 
     this.restaurantName = this.router.url.split('/')[2];
   }
@@ -99,7 +99,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
         this.order.items.push(item);
       }
     });
-    //this.orderNotificationService.sendOrder(this.order);
+    this.orderNotificationService.sendOrder(this.order);
     this.orderService.addOrder(this.restaurantName, this.order).subscribe(
       (res:any) => {
         if (res != null) {

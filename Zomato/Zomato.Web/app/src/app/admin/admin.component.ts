@@ -12,7 +12,7 @@ const cmp: string = "Admin Component";
 
 export class AdminComponent implements OnInit {
   pageTitle = "Zomato Admin"
-  token_admin: string;
+  token: string;
   userName: string;
   userToken: boolean = false;
 
@@ -20,10 +20,10 @@ export class AdminComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.token_admin = localStorage.getItem('token_admin');
-    if (this.token_admin != null) {
-      console.log(this.token_admin, "--Token is not null");
-      let decode_token = jwt_decode(this.token_admin);
+    this.token = localStorage.getItem('token');
+    if (this.token != null) {
+      console.log(this.token, "--Token is not null");
+      let decode_token = jwt_decode(this.token);
       if (decode_token['UserRole'] == "admin") {
         this.userName = decode_token['UserName'];
         this.userToken = true;
@@ -38,7 +38,7 @@ export class AdminComponent implements OnInit {
   }
 
   logOut() {
-    localStorage.removeItem('token_admin');
+    localStorage.removeItem('token');
     window.location.href = '/admin';
   }
 }

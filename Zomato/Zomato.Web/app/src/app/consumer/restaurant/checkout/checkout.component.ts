@@ -14,6 +14,7 @@ import * as jwt_decode from 'jwt-decode';
 import { ICartItemWithItems } from '../../../model/ICartItemWithItems';
 import { Order } from '../../../model/order';
 import { OrderService } from '../../../service/order.service';
+import { OrderNotificationService } from '../../../service/order-notification.service';
 
 @Component({
   templateUrl: './checkout.component.html',
@@ -24,7 +25,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   cart: Observable<ShoppingCart>
   cartItems: ICartItemWithItems[];
   itemCount: number;
-  restaurantName; token_user; location; userId; decode_token: string = " ";
+  restaurantName; token; location; userId; decode_token: string = " ";
   menus: any[]= [];
   cartSubscription; addressSubscription: Subscription;
   addressList: UserAddress[];
@@ -32,14 +33,15 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
   constructor(private menuService: MenuService, private router: Router, private toastr: ToastrService,
     private cartService: CartService, public userAddressService: UserAddressService,
-    public dialog: MatDialog, private orderService: OrderService) {
+    public dialog: MatDialog, private orderService: OrderService) {//, private orderNotificationService: OrderNotificationService) {
+
     this.restaurantName = this.router.url.split('/')[2];
   }
 
   ngOnInit(): void {
-    this.token_user = localStorage.getItem('token_user');
-    if (this.token_user != null) {
-      this.decode_token = jwt_decode(this.token_user)
+    this.token = localStorage.getItem('token');
+    if (this.token != null) {
+      this.decode_token = jwt_decode(this.token)
       this.userId = this.decode_token['UserId'];
     }
     this.addressDataList();
@@ -97,7 +99,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
         this.order.items.push(item);
       }
     });
-    console.log(this.order);
+    //this.orderNotificationService.sendOrder(this.order);
     this.orderService.addOrder(this.restaurantName, this.order).subscribe(
       (res:any) => {
         if (res != null) {
@@ -129,7 +131,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   }
 
   checkUserLogin(): void {
-    if (this.token_user != null) {
+    if (this.token != null) {
       this.openAddDialog();
     }
     else {

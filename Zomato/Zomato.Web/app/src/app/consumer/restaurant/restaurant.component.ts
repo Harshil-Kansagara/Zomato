@@ -18,7 +18,7 @@ export class RestaurantComponent implements OnInit, OnDestroy {
   register: Register;
   login: Login;
   userSubscription: Subscription;
-  token_user; decode_token; userName; userId: string;
+  token; decode_token; userName; userId: string;
 
   constructor(private toastr: ToastrService, private accountService: AccountService,
             private router: Router) { }
@@ -26,10 +26,10 @@ export class RestaurantComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.register = this.accountService.intializeRegister();
     this.login = this.accountService.initializeLogin();
-    this.token_user = localStorage.getItem('token_user');
-    if (this.token_user != null) {
-      console.log("Token is not null: ", this.token_user);
-      this.decode_token = jwt_decode(this.token_user)
+    this.token = localStorage.getItem('token');
+    if (this.token != null) {
+      console.log("Token is not null: ", this.token);
+      this.decode_token = jwt_decode(this.token)
       if (this.decode_token['UserRole'] == "user") {
         this.userName = this.decode_token['UserName'];
         this.userId = this.decode_token['UserId'];
@@ -78,7 +78,7 @@ export class RestaurantComponent implements OnInit, OnDestroy {
 
   loginUser(): void {
     console.log(this.login);
-    this.userSubscription = this.accountService.Login(this.login).subscribe(
+    this.userSubscription = this.accountService.LoginUser(this.login).subscribe(
       (res: any) => {
         if (res != null) {
           console.log(res.token);

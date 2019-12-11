@@ -7,14 +7,19 @@ import { Login } from '../model/login';
 export class AccountService {
 
   baseUrl: string = "api/user/";
+  baseUrl_admin:string = "api/admin/"
 
   constructor(private http: HttpClient) { }
 
-  public Login(login: Login) {
+  public LoginUser(login: Login) {
     return this.http.post(this.baseUrl + "login", login);
   }
 
-  //public Loginlogin: Login) {
+  public LoginAdmin(login: Login) {
+    return this.http.post(this.baseUrl_admin + "login", login);
+  }
+
+  //public Login(login: Login) {
   //  return this.http.post(this.baseUrl + "login", login);
   //}
 

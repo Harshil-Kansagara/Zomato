@@ -79,7 +79,7 @@ namespace Zomato.Web
             services.AddScoped<IReviewRepository, ReviewRepository>();
             services.AddScoped<IUserAddressRepository, UserAddressRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
-
+            
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("ZomatoDb"), 
@@ -145,7 +145,7 @@ namespace Zomato.Web
             });
 
             services.AddSignalR();
-           // services.AddSingleton<IUserIdProvider, NameUserIdProvider>();
+           //services.AddSingleton<IUserIdProvider, NameUserIdProvider>();
 
         }
 

@@ -65,29 +65,8 @@ namespace Zomato.Core.Controllers
             if (ModelState.IsValid)
             {
                 string userRole = await _unitOfWork.UserRepository.GetUserRole(user);
-                if(userRole == "admin") { 
-                    var result = await _unitOfWork.UserRepository.Login(user);
-                    if (result.Succeeded)
-                    {
-                        var userData = await _unitOfWork.UserRepository.FindByEmail(user.UserEmailAddress);
-                        var claims = new List<Claim> {
-                                 new Claim("UserId", userData.Id.ToString()),
-                                  new Claim("UserName", userData.UserName.ToString()),
-                                  new Claim("UserRole", "admin")
-                        };
-                        var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_appSettings.JWT_Secret));
-                        var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256Signature);
-                        var tokenOptions = new JwtSecurityToken
-                        (
-                            issuer: "http://localhost/59227",
-                            audience: "http://localhost/59227",
-                            claims: claims,
-                            expires: DateTime.Now.AddDays(1),
-                            signingCredentials: signinCredentials
-                        );
-                        var token = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
-                        return Ok(new { token });
-                    }
+                if(userRole == "admin") {
+                    return BadRequest();
                 }
                 else if(userRole == "user")
                 {
@@ -98,7 +77,8 @@ namespace Zomato.Core.Controllers
                         var claims = new List<Claim> {
                                  new Claim("UserId", userData.Id.ToString()),
                                   new Claim("UserName", userData.UserName.ToString()),
-                                  new Claim("UserRole", "user")
+                                  new Claim("UserRole", "user"),
+                                  new Claim(ClaimTypes.Name, userData.Id.ToString())
                         };
                         var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_appSettings.JWT_Secret));
                         var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256Signature);

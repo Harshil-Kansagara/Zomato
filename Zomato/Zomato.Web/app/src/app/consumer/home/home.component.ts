@@ -22,7 +22,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   register: Register;
   login: Login;
   promise: Subscription;
-  token_user; decode_token; userName; searchText; userId: string= "";
+  token; decode_token; userName; searchText; userId: string= "";
   restaurantList: string[] = [];
   restaurants: any[];
   restaurantCtrl: FormControl;
@@ -47,10 +47,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   checkUserLogin(): void {
-    this.token_user = localStorage.getItem('token_user');
-    if (this.token_user != null) {
-      console.log("Token is not null: ", this.token_user);
-      this.decode_token = jwt_decode(this.token_user)
+    this.token = localStorage.getItem('token');
+    if (this.token != null) {
+      console.log("Token is not null: ", this.token);
+      this.decode_token = jwt_decode(this.token)
       if (this.decode_token['UserRole'] == "user") {
         this.userName = this.decode_token['UserName'];
         this.userId = this.decode_token['UserId'];
@@ -132,13 +132,13 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   loginUser(): void {
     console.log(this.login);
-    this.promise = this.accountService.Login(this.login).subscribe(
+    this.promise = this.accountService.LoginUser(this.login).subscribe(
       (res: any) => {
         if (res != null) {
           console.log(res.token);
           this.decode_token = jwt_decode(res.token);
           if (this.decode_token['UserRole'] == 'user') {
-            localStorage.setItem('token_user', res.token);
+            localStorage.setItem('token', res.token);
             window.location.reload();
             this.toastr.success("Login Successful");
             this.userToken = true;
@@ -158,7 +158,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   logoutUser() {
-    localStorage.removeItem('token_user');
+    localStorage.removeItem('token');
     window.location.reload();
   }
 

@@ -12,7 +12,7 @@ import { Register } from '../../model/register';
 
 export class UserComponent implements OnInit, OnDestroy {
 
-  token_user; userId; decode_token: string;
+  token; userId; decode_token: string;
   userSubscription: Subscription;
   user: Register;
 
@@ -31,9 +31,9 @@ export class UserComponent implements OnInit, OnDestroy {
   }
 
   getUserId(): void {
-    this.token_user = localStorage.getItem('token_user');
-    if (this.token_user != null) {
-      this.decode_token = jwt_decode(this.token_user);
+    this.token = localStorage.getItem('token');
+    if (this.token != null) {
+      this.decode_token = jwt_decode(this.token);
       if (this.decode_token['UserRole'] == "user") {
         this.userId = this.decode_token['UserId'];
       }
@@ -53,7 +53,7 @@ export class UserComponent implements OnInit, OnDestroy {
   }
 
   logoutUser() {
-    localStorage.removeItem('token_user');
+    localStorage.removeItem('token');
     //window.location.reload();
     this.router.navigateByUrl("");
   }

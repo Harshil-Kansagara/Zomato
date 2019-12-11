@@ -5,24 +5,26 @@ import { HubConnection, HubConnectionBuilder } from '@aspnet/signalr';
 Injectable({ providedIn: "root" })
 export class OrderNotificationService {
   orderReceived = new EventEmitter<Order>();
+  token: string;
 
   connectionEstablished = new EventEmitter<Boolean>();
   private connectionIsEstablished = false;
   private _hubConnection: HubConnection;
 
   constructor() {
+    this.getUserId();
     this.createConnection();
-    this.registerOnServerEvents();
     this.startConnection();
+    this.registerOnServerEvents();
   }
 
   sendOrder(order: Order) {
     this._hubConnection.invoke('NewOrder', order);
   }
 
-  private createConnection() {
+  public createConnection() {
     this._hubConnection = new HubConnectionBuilder()
-      .withUrl("http://localhost:59227/OrderHub")
+      .withUrl("http://localhost:59227/OrderHub", { accessTokenFactory: () => this.token})
       .build();
   }
 
@@ -44,5 +46,9 @@ export class OrderNotificationService {
     this._hubConnection.on('OrderReceived', (data: any) => {
       this.orderReceived.emit(data);
     });
+  }
+
+  private getUserId(): void {
+    this.token = localStorage.getItem('token');
   }
 }

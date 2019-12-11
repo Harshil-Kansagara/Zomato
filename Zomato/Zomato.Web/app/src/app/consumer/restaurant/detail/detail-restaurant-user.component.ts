@@ -18,7 +18,7 @@ export class DetailRestaurantUserComponent implements OnInit, OnDestroy {
   restaurantName: string;
   restaurantDetail: Restaurant;
   resturantSubscription; updateRestaurantDataSubscription: Subscription;
-  cuisine; location; token_user; decode_token; userId: string = '';
+  cuisine; location; token; decode_token; userId: string = '';
   addressList: UserAddress[];
   navLinks: any[];
   activeLinkIndex = -1;
@@ -44,9 +44,9 @@ export class DetailRestaurantUserComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.token_user = localStorage.getItem('token_admin');
-    if (this.token_user != null) {
-      this.decode_token = jwt_decode(this.token_user)
+    this.token = localStorage.getItem('token');
+    if (this.token != null) {
+      this.decode_token = jwt_decode(this.token)
       this.userId = this.decode_token['UserId'];
     }
     this.router.events.subscribe((res) => {

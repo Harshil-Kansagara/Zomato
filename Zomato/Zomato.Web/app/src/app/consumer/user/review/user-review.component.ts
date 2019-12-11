@@ -19,7 +19,7 @@ import { MatDialog } from '@angular/material';
 export class UserReviewComponent implements OnInit, OnDestroy {
 
   toggle = true;
-  token_user; userId; decode_token: string;
+  token; userId; decode_token: string;
   reviewSubscription; likeSubscription; commentSubscription: Subscription;
   reviewList: Review[] = [];
   like: Like;
@@ -47,9 +47,9 @@ export class UserReviewComponent implements OnInit, OnDestroy {
   }
 
   getUserId(): void {
-    this.token_user = localStorage.getItem('token_user');
-    if (this.token_user != null) {
-      this.decode_token = jwt_decode(this.token_user);
+    this.token = localStorage.getItem('token');
+    if (this.token != null) {
+      this.decode_token = jwt_decode(this.token);
       if (this.decode_token['UserRole'] == "user") {
         this.userId = this.decode_token['UserId'];
       }

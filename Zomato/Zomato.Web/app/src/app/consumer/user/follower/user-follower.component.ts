@@ -13,7 +13,7 @@ import { ToastrService } from 'ngx-toastr';
 
 export class UserFollowerComponent implements OnInit, OnDestroy {
 
-  token_user; decode_token; userId: string;
+  token; decode_token; userId: string;
   userSubscription; followSubscription: Subscription;
   userList: any;
   follow: Follow;
@@ -41,9 +41,9 @@ export class UserFollowerComponent implements OnInit, OnDestroy {
   }
 
   getUserId(): void {
-    this.token_user = localStorage.getItem('token_user');
-    if (this.token_user != null) {
-      this.decode_token = jwt_decode(this.token_user);
+    this.token = localStorage.getItem('token');
+    if (this.token != null) {
+      this.decode_token = jwt_decode(this.token);
       if (this.decode_token['UserRole'] == "user") {
         this.userId = this.decode_token['UserId'];
       }

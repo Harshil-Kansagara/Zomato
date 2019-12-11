@@ -16,7 +16,7 @@ export class UserAddressComponent implements OnInit, OnDestroy {
   restaurantList: string[] = [];
   addressList: UserAddress[];
   addressSubscription: Subscription;
-  token_user; userId;decode_token: string;
+  token; userId;decode_token: string;
 
   constructor(private addressService: UserAddressService,
     private toastr: ToastrService, public dialog: MatDialog) {}
@@ -33,9 +33,9 @@ export class UserAddressComponent implements OnInit, OnDestroy {
   }
 
   getUserId(): void {
-    this.token_user = localStorage.getItem('token_user');
-    if (this.token_user != null) {
-      this.decode_token = jwt_decode(this.token_user);
+    this.token = localStorage.getItem('token');
+    if (this.token != null) {
+      this.decode_token = jwt_decode(this.token);
       if (this.decode_token['UserRole'] == "user") {
         this.userId = this.decode_token['UserId'];
       }

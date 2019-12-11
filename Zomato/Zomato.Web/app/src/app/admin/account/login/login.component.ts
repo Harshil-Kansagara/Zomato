@@ -33,22 +33,22 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   submit() {
     console.log(this.login);
-    this.promise = this.accountService.Login(this.login).subscribe(
+    this.promise = this.accountService.LoginAdmin(this.login).subscribe(
       (res: any) => {
         if (res != null) {
-          let decode_token = jwt_decode(res.token);
-          if (decode_token['UserRole'] == 'admin') {
-            localStorage.setItem('token_admin', res.token);
-            //window.location.reload();
-            this.toastr.success("Login Successful");
-            window.location.href = "admin/restaurant";
-          } else {
-            this.toastr.error("You don't have priviledge to access this page");
-          }
+          localStorage.setItem('token', res.token);
+          this.toastr.success("Login Successful");
+          window.location.href = "/admin/restaurant";
+
+          //let decode_token = jwt_decode(res.token);
+          //if (decode_token['UserRole'] == 'admin') {
+          //} else {
+          //  this.toastr.error("You don't have priviledge to access this page");
+          //}
         }
       }, err => {
         if (err.status == 400) {
-          this.toastr.error('Incorrect Username or Password.', 'Authentication Failed.');
+          this.toastr.error('Authentication Failed.');
         } else {
           console.log(err);
         }

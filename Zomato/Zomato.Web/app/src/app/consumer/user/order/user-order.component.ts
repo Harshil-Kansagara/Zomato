@@ -16,7 +16,7 @@ import { Order } from '../../../model/order';
 
 export class UserOrderComponent implements OnInit, OnDestroy {
 
-  private token_user; userId; decode_token; searchText: string;
+  private token; userId; decode_token; searchText: string;
   private totalOrder: number = 0;
   p: number = 1;
   private orderSubscription: Subscription;
@@ -37,9 +37,9 @@ export class UserOrderComponent implements OnInit, OnDestroy {
   }
 
   private getUserId(): void {
-    this.token_user = localStorage.getItem('token_user');
-    if (this.token_user != null) {
-      this.decode_token = jwt_decode(this.token_user);
+    this.token = localStorage.getItem('token');
+    if (this.token != null) {
+      this.decode_token = jwt_decode(this.token);
       if (this.decode_token['UserRole'] == "user") {
         this.userId = this.decode_token['UserId'];
       }

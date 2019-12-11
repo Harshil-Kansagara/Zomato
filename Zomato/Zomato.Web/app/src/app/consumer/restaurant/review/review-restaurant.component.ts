@@ -20,7 +20,7 @@ export class ReviewComponent implements OnInit, OnDestroy {
   review: Review;
   comment: Comment;
   reviewList: Review[] = [];
-  restaurantName; token_user; decode_token; userId: string;
+  restaurantName; token; decode_token; userId: string;
   reviewSubscription; likeSubscription; commentSubscription: Subscription;
   toggle: boolean = true;
   like: Like;
@@ -50,10 +50,10 @@ export class ReviewComponent implements OnInit, OnDestroy {
   }
 
   checkUserStatus() {
-    this.token_user = localStorage.getItem('token_user');
-    if (this.token_user != null) {
-      console.log("Token is not null: ", this.token_user);
-      this.decode_token = jwt_decode(this.token_user)
+    this.token = localStorage.getItem('token');
+    if (this.token != null) {
+      console.log("Token is not null: ", this.token);
+      this.decode_token = jwt_decode(this.token)
       this.userId = this.decode_token['UserId'];
       console.log(this.userId);
        return true;

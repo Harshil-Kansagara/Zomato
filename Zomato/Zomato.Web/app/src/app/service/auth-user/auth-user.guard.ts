@@ -9,16 +9,16 @@ import * as jwt_decode from 'jwt-decode';
 
 export class AuthUserGuard implements CanActivate {
 
-  token_user; decode_token; userName; searchText; userId; role: string = "";
+  token; decode_token; userName; searchText; userId; role: string = "";
 
   constructor(private router: Router) {
   }
 
   canActivate(next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): boolean {
-    this.token_user = localStorage.getItem('token_user');
-    if (this.token_user != null) {
-      this.decode_token = jwt_decode(this.token_user)
+    this.token = localStorage.getItem('token');
+    if (this.token != null) {
+      this.decode_token = jwt_decode(this.token)
       if (this.decode_token['UserRole'] == "user") {
         return true;
       } else {

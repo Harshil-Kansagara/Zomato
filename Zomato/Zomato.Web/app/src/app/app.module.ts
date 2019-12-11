@@ -29,6 +29,7 @@ import { OrderNotificationService } from './service/order-notification.service';
     }),
     AppRoutingModule
   ],
+ // providers: [OrderNotificationService],
   providers: [],
   bootstrap: [AppComponent]
 })

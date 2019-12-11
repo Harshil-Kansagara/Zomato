@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core';
 import { Router } from '@angular/router';
 import { HubConnection } from '@aspnet/signalr';
 import * as signalR from '@aspnet/signalr';
 import * as jwt_decode from 'jwt-decode';
+import { OrderNotificationService } from './service/order-notification.service';
 
 @Component({
   selector: 'app-root',
@@ -11,15 +12,28 @@ import * as jwt_decode from 'jwt-decode';
 })
 export class AppComponent{
 
-  token_user;decode_token: string;
+  token: string;
+  //token: string[] = [];
+  //orders: any[] = [];
+  //constructor(private orderNotificationService: OrderNotificationService, private _ngZone: NgZone) {
+  //  this.subscribeToEvents();
+  //}
 
-  constructor() { }
+  //private subscribeToEvents(): void {
+
+  //  this.orderNotificationService.orderReceived.subscribe((order: any) => {
+  //    this._ngZone.run(() => {
+  //      //this.orders.push(order);
+  //      console.log(order);
+  //    });
+  //  });
+  //}
 
   ngOnInit(): void {
     this.getUserId();
     const connection = new signalR.HubConnectionBuilder()
       .configureLogging(signalR.LogLevel.Information)
-      .withUrl("http://localhost:59227/notify", { accessTokenFactory: () => this.token_user })
+      .withUrl("http://localhost:59227/notify", { accessTokenFactory: () => this.token })
       .build();
 
     connection.start().then(function () {
@@ -35,9 +49,6 @@ export class AppComponent{
   }
 
   getUserId(): void {
-    this.token_user = localStorage.getItem('token_user');
-    if (this.token_user != null) {
-      this.decode_token = jwt_decode(this.token_user);
-    }
+    this.token = localStorage.getItem('token');
   }
 }

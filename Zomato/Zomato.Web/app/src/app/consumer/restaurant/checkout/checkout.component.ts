@@ -99,7 +99,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
         this.order.items.push(item);
       }
     });
-    this.orderNotificationService.sendOrder(this.order);
+    //this.orderNotificationService.sendOrder(this.order);
     this.orderService.addOrder(this.restaurantName, this.order).subscribe(
       (res:any) => {
         if (res != null) {
@@ -143,23 +143,24 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   openAddDialog(): void {
     const dialogRef = this.dialog.open(addUserAddressDialogComponent, {
       width: '250px',
-      data: { Address: "", AddressId: "" }
+      data: { Address: "", AddressId: 0 }
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result != null) {
         result.UserId = this.userId;
+        console.log("Address Added:");
         console.log(result);
         this.addressSubscription = this.userAddressService.addUserAddress(result).subscribe(
           res => {
             this.addressDataList();
           }, err => {
-            if (err.status == 400) {
-              this.toastr.error("Location Already exists");
-            } else {
+            //if (err.status == 400) {
+            //  this.toastr.error("Location Already exists");
+            //} else {
               console.log(err);
             }
-          }
+          //}
         );
       }
     });

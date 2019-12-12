@@ -34,7 +34,7 @@ namespace Zomato.Core.Controllers
                     var userAddressList = _unitOfWork.UserAddressRepository.GetAddressList(newUserAddress.UserId).Result;
                     foreach (var each in userAddressList)
                     {
-                        if (each.Address == newUserAddress.Address)
+                        if (each.Address == newUserAddress.Address && each.UserId == newUserAddress.UserId)
                         {
                             return BadRequest();
                         }

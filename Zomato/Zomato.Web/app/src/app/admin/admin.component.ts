@@ -1,8 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core';
 import { Router } from '@angular/router';
 import { Debuger } from '../service/debug.service';
 import { HttpClient } from '@angular/common/http';
 import * as jwt_decode from 'jwt-decode';
+import { Order } from '../model/order';
+import { ToastrService } from 'ngx-toastr';
+import { OrderNotificationService } from '../service/order-notification.service';
 
 const cmp: string = "Admin Component";
 
@@ -15,8 +18,12 @@ export class AdminComponent implements OnInit {
   token: string;
   userName: string;
   userToken: boolean = false;
+  orders: Order[] = [];
+  notificationCount: number = 0;
 
-  constructor(private router: Router, private http: HttpClient) {
+  constructor(private router: Router, private http: HttpClient, private orderNotificationService: OrderNotificationService,
+              private _ngZone: NgZone, private toastr: ToastrService) {
+    this.subscribeToEvents();
   }
 
   ngOnInit(): void {
@@ -35,6 +42,21 @@ export class AdminComponent implements OnInit {
     else {
       console.log("Token is null")
     }
+  }
+
+  private subscribeToEvents(): void {
+
+    this.orderNotificationService.orderReceived.subscribe((order: Order) => {
+      this._ngZone.run(() => {
+        order.restaurantName = order.restaurantName.replace('%20', ' ');
+        this.orders.push(order);
+        this.toastr.success(order.restaurantName + " has order");
+        console.log("BroadCast Data");
+        console.log(order);
+        this.notificationCount = this.orders.length;
+        //console.log("Order count: " + this.orders.length);
+      });
+    });
   }
 
   logOut() {

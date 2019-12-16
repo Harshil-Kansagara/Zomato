@@ -1,6 +1,7 @@
 import { Injectable, EventEmitter } from "@angular/core";
 import { Order } from '../model/order';
 import { HubConnection, HubConnectionBuilder } from '@aspnet/signalr';
+import { ToastrService } from 'ngx-toastr';
 
 Injectable({ providedIn: "root" })
 export class OrderNotificationService {
@@ -43,7 +44,7 @@ export class OrderNotificationService {
   }
 
   private registerOnServerEvents(): void {
-    this._hubConnection.on('OrderReceived', (data: any) => {
+    this._hubConnection.on('OrderReceived', (data: Order) => {
       this.orderReceived.emit(data);
     });
   }

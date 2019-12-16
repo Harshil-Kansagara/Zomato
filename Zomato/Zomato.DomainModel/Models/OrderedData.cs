@@ -8,6 +8,7 @@ namespace Zomato.DomainModel.Models
     {
         public string UserId { get; set; }
         public int AddressId { get; set; }
+        public string RestaurantName { get; set; }
         public List<ItemDataCollection> Items { get; set; }
     }
 }

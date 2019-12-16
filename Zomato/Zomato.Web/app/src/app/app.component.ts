@@ -4,6 +4,8 @@ import { HubConnection } from '@aspnet/signalr';
 import * as signalR from '@aspnet/signalr';
 import * as jwt_decode from 'jwt-decode';
 import { OrderNotificationService } from './service/order-notification.service';
+import { Order } from './model/order';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-root',
@@ -12,22 +14,24 @@ import { OrderNotificationService } from './service/order-notification.service';
 })
 export class AppComponent{
 
-  token: string;
-  //orders: any[] = [];
-  constructor(private orderNotificationService: OrderNotificationService, private _ngZone: NgZone) {
-    this.subscribeToEvents();
+  //token: string;
+  //orders: Order[] = [];
+  constructor(private orderNotificationService: OrderNotificationService) {//, private _ngZone: NgZone, private toastr: ToastrService) {
+//    this.subscribeToEvents();
   }
 
-  private subscribeToEvents(): void {
+  //private subscribeToEvents(): void {
 
-    this.orderNotificationService.orderReceived.subscribe((order: any) => {
-      this._ngZone.run(() => {
-        //this.orders.push(order);
-        console.log("BroadCast Data");
-        console.log(order);
-      });
-    });
-  }
+  //  this.orderNotificationService.orderReceived.subscribe((order: Order) => {
+  //    this._ngZone.run(() => {
+  //      this.orders.push(order);
+  //      this.toastr.success(order.restaurantName + " has new order");
+  //      console.log("BroadCast Data");
+  //      console.log(order);
+  //      console.log("Order count: " + this.orders.length);
+  //    });
+  //  });
+  //}
 
   //ngOnInit(): void {
   //  this.getUserId();
@@ -48,7 +52,7 @@ export class AppComponent{
   //  });
   //}
 
-  getUserId(): void {
-    this.token = localStorage.getItem('token');
-  }
+  //getUserId(): void {
+  //  this.token = localStorage.getItem('token');
+  //}
 }

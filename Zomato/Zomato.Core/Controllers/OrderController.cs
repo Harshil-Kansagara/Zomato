@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNet.SignalR;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using System;
@@ -16,9 +17,9 @@ namespace Zomato.Core.Controllers
     public class OrderController : ControllerBase
     {
         private IUnitOfWork _unitOfWork;
-        //private IHubContext<NotifyHub, ITypedHubClient> _hubContext;
-        private IHubContext<OrderHub> _hubContext;
-        public OrderController(IUnitOfWork unitOfWork, IHubContext<OrderHub> hubContext)//IHubContext<NotifyHub, ITypedHubClient> hubContext)
+        private IHubContext<NotifyHub, ITypedHubClient> _hubContext;
+
+        public OrderController(IUnitOfWork unitOfWork, IHubContext<NotifyHub, ITypedHubClient> hubContext)
         {
             _unitOfWork = unitOfWork;
             _hubContext = hubContext;
@@ -49,7 +50,7 @@ namespace Zomato.Core.Controllers
 
                     _unitOfWork.commit();
                 }
-                await _hubContext.Clients.All.SendAsync("NewOrder", order);
+                
                 //try
                 //{
                 //    //await _hubContext.Clients.User("4aa56cd4-3ac4-4be0-af99-5933372d8a22").BroadcastMessage(order);

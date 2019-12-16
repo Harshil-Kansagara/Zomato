@@ -36,6 +36,7 @@ export class OrderService {
       userId: null,
       addressId: 0,
       restaurantId: 0,
+      restaurantName: null,
       items: []
     }
   }

@@ -8,8 +8,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { PageNotFoundComponent } from './page-not-found.component';
 import { Debuger } from './service/debug.service';
 import { ToastrModule } from 'ngx-toastr';
-import { AdminComponent } from './admin/admin.component';
-import { MatButtonModule, MatIconModule } from '@angular/material';
+import { AdminComponent, OrderDetailAdminDialogComponent } from './admin/admin.component';
+import { MatButtonModule, MatIconModule, MatDialogModule } from '@angular/material';
 import { OrderNotificationService } from './service/order-notification.service';
 
 
@@ -17,19 +17,21 @@ import { OrderNotificationService } from './service/order-notification.service';
   declarations: [
     AppComponent,
     AdminComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    OrderDetailAdminDialogComponent
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    MatButtonModule, MatIconModule,
+    MatButtonModule, MatIconModule, MatDialogModule,
     ToastrModule.forRoot({
       progressBar: true
     }),
     AppRoutingModule
   ],
   providers: [OrderNotificationService],
+  entryComponents: [OrderDetailAdminDialogComponent],
   //providers: [],
   bootstrap: [AppComponent]
 })

@@ -1,10 +1,8 @@
-import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
+import { Component, OnInit, OnDestroy} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CartService } from '../../../service/cart.service';
 import { Observable, Subscription } from 'rxjs';
 import { ShoppingCart } from '../../../model/shopping-cart';
 import { ICartItemWithItems } from '../../../model/ICartItemWithItems';
-import { MenuService } from '../../../service/menu.service';
 import { OrderService } from '../../../service/order.service';
 import { OrderDetail } from '../../../model/order-detail';
 import { ToastrService } from 'ngx-toastr';
@@ -17,7 +15,7 @@ import { ToastrService } from 'ngx-toastr';
 export class OrderConfirmComponent implements OnInit, OnDestroy{
   cart: Observable<ShoppingCart>
   cartItems: ICartItemWithItems[];
-  restaurantName; display: string;
+  restaurantName/*; display*/: string;
   menus: any[] = [];
   cartSubscription: Subscription;
   itemCount: number = 0;
@@ -53,7 +51,7 @@ export class OrderConfirmComponent implements OnInit, OnDestroy{
           for (let each of this.orderDetail.itemDetail) {
             this.itemCount = this.itemCount + each.itemQuantity;
           }
-        } setTimeout(() => { this.display = "Delivered Succefully" }, 8000)
+        } //setTimeout(() => { this.display = "Delivered Succefully" }, 8000)
       }, err => {
         console.log(err);
       });

@@ -1,7 +1,7 @@
 {
   "runtimeTarget": {
     "name": ".NETCoreApp,Version=v2.2",
-    "signature": "bf07318062265021657a1475bba3d134a94234ca"
+    "signature": "7afcd18c99bf65000378728daf9c59c827d6eee3"
   },
   "compilationOptions": {
     "defines": [
@@ -39,18 +39,6 @@
           "Zomato.Web.dll": {}
         }
       },
-      "Microsoft.AspNet.SignalR/2.4.1": {},
-      "Microsoft.AspNet.SignalR.Core/2.4.1": {
-        "runtime": {
-          "lib/net45/Microsoft.AspNet.SignalR.Core.dll": {
-            "assemblyVersion": "2.4.1.0",
-            "fileVersion": "2.4.1.19093"
-          }
-        },
-        "compile": {
-          "lib/net45/Microsoft.AspNet.SignalR.Core.dll": {}
-        }
-      },
       "Microsoft.AspNet.WebApi.Core/5.2.3": {
         "dependencies": {
           "Microsoft.AspNet.WebApi.Client": "5.2.6"
@@ -68,7 +56,6 @@
       "Microsoft.TypeScript.MSBuild/3.6.3": {},
       "Zomato.Core/1.0.0": {
         "dependencies": {
-          "Microsoft.AspNet.SignalR.Core": "2.4.1",
           "Microsoft.AspNet.WebApi.Core": "5.2.3",
           "Microsoft.AspNetCore.App": "2.2.0",
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "2.2.0",
@@ -99,7 +86,6 @@
       },
       "Zomato.Repository/1.0.0": {
         "dependencies": {
-          "Microsoft.AspNet.SignalR": "2.4.1",
           "Microsoft.AspNetCore.Identity": "2.2.0",
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "2.2.0",
           "Zomato.DomainModel": "1.0.0"
@@ -3312,20 +3298,6 @@
       "type": "project",
       "serviceable": false,
       "sha512": ""
-    },
-    "Microsoft.AspNet.SignalR/2.4.1": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-aYbLVE5toZwv/qaQ0BiIZRRwN/00WKYzGjaYUWIQuI91xZ50nnAymWD1sxCZFN9XXDRq8bevM5ET9GmAeOI/Nw==",
-      "path": "microsoft.aspnet.signalr/2.4.1",
-      "hashPath": "microsoft.aspnet.signalr.2.4.1.nupkg.sha512"
-    },
-    "Microsoft.AspNet.SignalR.Core/2.4.1": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-da5vF7ERsXAfFz2RzyXIV2VZACxsw+NxWwKtwXuHde7xuApvI/njJhpzq+LkoYpOYfzPZ8BbccaZ1yOaw1AQ4w==",
-      "path": "microsoft.aspnet.signalr.core/2.4.1",
-      "hashPath": "microsoft.aspnet.signalr.core.2.4.1.nupkg.sha512"
     },
     "Microsoft.AspNet.WebApi.Core/5.2.3": {
       "type": "package",

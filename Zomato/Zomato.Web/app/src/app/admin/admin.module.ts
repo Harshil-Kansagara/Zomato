@@ -22,6 +22,7 @@ import { BarRatingModule } from 'ngx-bar-rating';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { AuthAdminInterceptor } from '../service/auth-admin/auth-admin.interceptor';
 import { AuthAdminGuard } from '../service/auth-admin/auth-admin.guard';
+import { OrderDetailAdminDialogComponent } from './admin.component';
 
 const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -88,7 +89,7 @@ const routes: Routes = [
     useClass: AuthAdminInterceptor,
     multi: true
   }],
-  entryComponents: [OrderDetailDialogComponent, addCommentDialogComponent]
+  entryComponents: [OrderDetailDialogComponent, /*OrderDetailAdminDialogComponent,*/ addCommentDialogComponent]
 })
 
 export class AdminModule {

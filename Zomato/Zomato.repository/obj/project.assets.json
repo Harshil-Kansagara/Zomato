@@ -2,9 +2,6 @@
   "version": 3,
   "targets": {
     ".NETCoreApp,Version=v2.2": {
-      "Microsoft.AspNet.SignalR/2.4.1": {
-        "type": "package"
-      },
       "Microsoft.AspNetCore.Authentication/2.2.0": {
         "type": "package",
         "dependencies": {
@@ -1355,17 +1352,6 @@
     }
   },
   "libraries": {
-    "Microsoft.AspNet.SignalR/2.4.1": {
-      "sha512": "aYbLVE5toZwv/qaQ0BiIZRRwN/00WKYzGjaYUWIQuI91xZ50nnAymWD1sxCZFN9XXDRq8bevM5ET9GmAeOI/Nw==",
-      "type": "package",
-      "path": "microsoft.aspnet.signalr/2.4.1",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "microsoft.aspnet.signalr.2.4.1.nupkg.sha512",
-        "microsoft.aspnet.signalr.nuspec"
-      ]
-    },
     "Microsoft.AspNetCore.Authentication/2.2.0": {
       "sha512": "b0R9X7L6zMqNsssKDvhYHuNi5x0s4DyHTeXybIAyGaitKiW1Q5aAGKdV2codHPiePv9yHfC9hAMyScXQ/xXhPw==",
       "type": "package",
@@ -4507,7 +4493,6 @@
   },
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v2.2": [
-      "Microsoft.AspNet.SignalR >= 2.4.1",
       "Microsoft.AspNetCore.Identity >= 2.2.0",
       "Microsoft.AspNetCore.Identity.EntityFrameworkCore >= 2.2.0",
       "Microsoft.NETCore.App >= 2.2.0",
@@ -4559,10 +4544,6 @@
     "frameworks": {
       "netcoreapp2.2": {
         "dependencies": {
-          "Microsoft.AspNet.SignalR": {
-            "target": "Package",
-            "version": "[2.4.1, )"
-          },
           "Microsoft.AspNetCore.Identity": {
             "target": "Package",
             "version": "[2.2.0, )"

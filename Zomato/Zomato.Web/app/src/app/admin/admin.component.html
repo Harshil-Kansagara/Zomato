@@ -25,7 +25,7 @@
           </i>
           <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
             <ng-container *ngFor="let each of orders">
-              <a class="dropdown-item" (click)="notificationclick(each.userId)">{{each.restaurantName}} has order</a>
+              <a class="dropdown-item" (click)="orderDetailDialog(each.orderId)">{{each.restaurantName}} has order</a>
             </ng-container>
           </div>
         </button>

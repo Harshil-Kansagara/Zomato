@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNet.SignalR;
+﻿
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
@@ -17,12 +17,12 @@ namespace Zomato.Core.Controllers
     public class OrderController : ControllerBase
     {
         private IUnitOfWork _unitOfWork;
-        private IHubContext<NotifyHub, ITypedHubClient> _hubContext;
+        private IHubContext<OrderHub> _orderHub;
 
-        public OrderController(IUnitOfWork unitOfWork, IHubContext<NotifyHub, ITypedHubClient> hubContext)
+        public OrderController(IUnitOfWork unitOfWork, IHubContext<OrderHub> orderHub)
         {
             _unitOfWork = unitOfWork;
-            _hubContext = hubContext;
+            _orderHub = orderHub;
         }
 
         [HttpPost]
@@ -50,17 +50,23 @@ namespace Zomato.Core.Controllers
 
                     _unitOfWork.commit();
                 }
+
+                var connectionList = await _unitOfWork.OrderNotificationRepository.GetConnectionList();
+
+                foreach (var each in connectionList)
+                {
+                    if(each.UserId == "4aa56cd4-3ac4-4be0-af99-5933372d8a22")
+                    {
+                        OrderNotification orderNotification = new OrderNotification();
+                        orderNotification.OrderId = order.OrderId;
+                        orderNotification.RestaurantName = restaurantName;
+                        await _orderHub.Clients.Client(each.ConnectionId).SendAsync("OrderReceived", orderNotification);
+                        break;
+                    }
+                }
+
+                 return Ok(order);
                 
-                //try
-                //{
-                //    //await _hubContext.Clients.User("4aa56cd4-3ac4-4be0-af99-5933372d8a22").BroadcastMessage(order);
-                //    await _hubContext.Clients.All.BroadcastMessage(order);
-                //}
-                //catch (Exception ex)
-                //{
-                //    throw ex;
-                //}
-                return Ok(order);
             }
             return BadRequest();
         }

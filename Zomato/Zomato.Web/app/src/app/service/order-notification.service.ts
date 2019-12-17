@@ -19,9 +19,9 @@ export class OrderNotificationService {
     this.registerOnServerEvents();
   }
 
-  sendOrder(order: Order) {
-    this._hubConnection.invoke('NewOrder', order);
-  }
+  //sendOrder(order: Order) {
+  //  this._hubConnection.invoke('NewOrder', order);
+  //}
 
   public createConnection() {
     this._hubConnection = new HubConnectionBuilder()

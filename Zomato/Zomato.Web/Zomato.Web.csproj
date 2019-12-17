@@ -23,6 +23,7 @@
     <Content Include="app\src\app\admin\account\login\login.component.html" />
     <Content Include="app\src\app\admin\account\register\register.component.html" />
     <Content Include="app\src\app\admin\admin.component.html" />
+    <Content Include="app\src\app\admin\order-detail-admin.component.html" />
     <Content Include="app\src\app\admin\restaurant\add-menu\add-menu.component.html" />
     <Content Include="app\src\app\admin\restaurant\add-restaurant\add-restaurant-info.component.html" />
     <Content Include="app\src\app\admin\restaurant\add-restaurant\add-restaurant-search.component.html" />

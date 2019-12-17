@@ -92,7 +92,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     this.cart.subscribe((cart) => {
       this.order.addressId = cart.deliveryAddressId;
       this.order.userId = this.userId;
-      this.order.restaurantName = this.restaurantName;
+      //this.order.restaurantName = this.restaurantName;
       for (let each of this.cartItems) {
         let item = new CartItem();
         item.ItemId = each.ItemId;
@@ -100,7 +100,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
         this.order.items.push(item);
       }
     });
-    this.orderNotificationService.sendOrder(this.order);
+    //this.orderNotificationService.sendOrder(this.order);
     this.orderService.addOrder(this.restaurantName, this.order).subscribe(
       (res:any) => {
         if (res != null) {
@@ -156,9 +156,6 @@ export class CheckoutComponent implements OnInit, OnDestroy {
           res => {
             this.addressDataList();
           }, err => {
-            //if (err.status == 400) {
-            //  this.toastr.error("Location Already exists");
-            //} else {
               console.log(err);
             }
           //}

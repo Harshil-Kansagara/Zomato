@@ -16,6 +16,7 @@ using Zomato.Repository.RestCuisineRepository;
 using Zomato.Repository.ReviewRepository;
 using Zomato.Repository.UserAddressRepository;
 using Zomato.Repository.UserRepository;
+using Zomato.Repository.NotificationRepository;
 
 namespace Zomato.Repository.UnitofWork
 {
@@ -36,6 +37,7 @@ namespace Zomato.Repository.UnitofWork
         IReviewRepository ReviewRepository { get; }
         IUserRepository UserRepository { get; }
         IUserAddressRepository UserAddressRepository { get; }
+        IOrderNotificationRepository OrderNotificationRepository { get; } 
         int commit();
     }
 }

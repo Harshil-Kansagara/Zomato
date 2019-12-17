@@ -12,6 +12,12 @@ C:\Users\harshilkansagara\source\repos\Zomato\Zomato\Zomato.Web\app\dist\out-tsc
 C:\Users\harshilkansagara\source\repos\Zomato\Zomato\Zomato.Web\app\dist\out-tsc\src\app\model\order.js.map
 C:\Users\harshilkansagara\source\repos\Zomato\Zomato\Zomato.Web\app\dist\out-tsc\src\app\service\order-notification.service.js
 C:\Users\harshilkansagara\source\repos\Zomato\Zomato\Zomato.Web\app\dist\out-tsc\src\app\service\order-notification.service.js.map
+C:\Users\harshilkansagara\source\repos\Zomato\Zomato\Zomato.Web\app\dist\out-tsc\src\app\model\order-item-detail.js
+C:\Users\harshilkansagara\source\repos\Zomato\Zomato\Zomato.Web\app\dist\out-tsc\src\app\model\order-item-detail.js.map
+C:\Users\harshilkansagara\source\repos\Zomato\Zomato\Zomato.Web\app\dist\out-tsc\src\app\model\order-detail.js
+C:\Users\harshilkansagara\source\repos\Zomato\Zomato\Zomato.Web\app\dist\out-tsc\src\app\model\order-detail.js.map
+C:\Users\harshilkansagara\source\repos\Zomato\Zomato\Zomato.Web\app\dist\out-tsc\src\app\service\order.service.js
+C:\Users\harshilkansagara\source\repos\Zomato\Zomato\Zomato.Web\app\dist\out-tsc\src\app\service\order.service.js.map
 C:\Users\harshilkansagara\source\repos\Zomato\Zomato\Zomato.Web\app\dist\out-tsc\src\app\admin\admin.component.js
 C:\Users\harshilkansagara\source\repos\Zomato\Zomato\Zomato.Web\app\dist\out-tsc\src\app\admin\admin.component.js.map
 C:\Users\harshilkansagara\source\repos\Zomato\Zomato\Zomato.Web\app\dist\out-tsc\src\app\app-routing.module.js
@@ -68,12 +74,6 @@ C:\Users\harshilkansagara\source\repos\Zomato\Zomato\Zomato.Web\app\dist\out-tsc
 C:\Users\harshilkansagara\source\repos\Zomato\Zomato\Zomato.Web\app\dist\out-tsc\src\app\service\menu.service.js.map
 C:\Users\harshilkansagara\source\repos\Zomato\Zomato\Zomato.Web\app\dist\out-tsc\src\app\admin\restaurant\add-menu\add-menu.component.js
 C:\Users\harshilkansagara\source\repos\Zomato\Zomato\Zomato.Web\app\dist\out-tsc\src\app\admin\restaurant\add-menu\add-menu.component.js.map
-C:\Users\harshilkansagara\source\repos\Zomato\Zomato\Zomato.Web\app\dist\out-tsc\src\app\service\order.service.js
-C:\Users\harshilkansagara\source\repos\Zomato\Zomato\Zomato.Web\app\dist\out-tsc\src\app\service\order.service.js.map
-C:\Users\harshilkansagara\source\repos\Zomato\Zomato\Zomato.Web\app\dist\out-tsc\src\app\model\order-item-detail.js
-C:\Users\harshilkansagara\source\repos\Zomato\Zomato\Zomato.Web\app\dist\out-tsc\src\app\model\order-item-detail.js.map
-C:\Users\harshilkansagara\source\repos\Zomato\Zomato\Zomato.Web\app\dist\out-tsc\src\app\model\order-detail.js
-C:\Users\harshilkansagara\source\repos\Zomato\Zomato\Zomato.Web\app\dist\out-tsc\src\app\model\order-detail.js.map
 C:\Users\harshilkansagara\source\repos\Zomato\Zomato\Zomato.Web\app\dist\out-tsc\src\app\consumer\user\order\user-order.component.js
 C:\Users\harshilkansagara\source\repos\Zomato\Zomato\Zomato.Web\app\dist\out-tsc\src\app\consumer\user\order\user-order.component.js.map
 C:\Users\harshilkansagara\source\repos\Zomato\Zomato\Zomato.Web\app\dist\out-tsc\src\app\model\review.js

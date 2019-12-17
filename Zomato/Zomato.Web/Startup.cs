@@ -79,7 +79,8 @@ namespace Zomato.Web
             services.AddScoped<IReviewRepository, ReviewRepository>();
             services.AddScoped<IUserAddressRepository, UserAddressRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
-            
+            services.AddScoped<IOrderNotificationRepository, OrderNotificationRepository>();
+
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("ZomatoDb"), 

@@ -17,6 +17,7 @@ using Zomato.Repository.RestCuisineRepository;
 using Zomato.Repository.ReviewRepository;
 using Zomato.Repository.UserAddressRepository;
 using Zomato.Repository.UserRepository;
+using Zomato.Repository.NotificationRepository;
 
 namespace Zomato.Repository.UnitofWork
 {
@@ -39,6 +40,7 @@ namespace Zomato.Repository.UnitofWork
         public IReviewRepository ReviewRepository { get; private set; }
         public IUserRepository UserRepository { get; private set; } 
         public IUserAddressRepository UserAddressRepository { get; private set; }
+        public IOrderNotificationRepository OrderNotificationRepository { get; private set; }
 
         //public ICategoryRepository _CategoryRepository => throw new NotImplementedException();
 
@@ -66,7 +68,7 @@ namespace Zomato.Repository.UnitofWork
 
         //public IUserAddressRepository _UserAddressRepository => throw new NotImplementedException();
 
-        public UnitOfWork(ApplicationDbContext applicationDbContext, ICategoryRepository categoryRepository, ICommentRepository commentRepository, ICuisineRepository cuisineRepository, IFollowRepository followRepository, ILikeRepository likeRepository, IMenuRepository menuRepository, IOrderRepository orderRepository, IOrderedItemRepository orderedItemRepository, IRestaurantRepository restaurantRepository, IRestLocationRepository restLocationRepository, IRestCuisineRepository restCuisineRepository, IRestCategoryRepository restCategoryRepository, IReviewRepository reviewRepository,IUserRepository userRepository, IUserAddressRepository userAddressRepository)
+        public UnitOfWork(ApplicationDbContext applicationDbContext, ICategoryRepository categoryRepository, ICommentRepository commentRepository, ICuisineRepository cuisineRepository, IFollowRepository followRepository, ILikeRepository likeRepository, IMenuRepository menuRepository, IOrderRepository orderRepository, IOrderedItemRepository orderedItemRepository, IRestaurantRepository restaurantRepository, IRestLocationRepository restLocationRepository, IRestCuisineRepository restCuisineRepository, IRestCategoryRepository restCategoryRepository, IReviewRepository reviewRepository,IUserRepository userRepository, IUserAddressRepository userAddressRepository, IOrderNotificationRepository orderNotificationRepository)
         {
             _applicationDbContext = applicationDbContext;
             CategoryRepository = categoryRepository;
@@ -84,6 +86,7 @@ namespace Zomato.Repository.UnitofWork
             ReviewRepository = reviewRepository;
             UserRepository = userRepository;
             UserAddressRepository = userAddressRepository;
+            OrderNotificationRepository = orderNotificationRepository;
         }
 
         public int commit()

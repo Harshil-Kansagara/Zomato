@@ -89,7 +89,7 @@ const routes: Routes = [
     useClass: AuthAdminInterceptor,
     multi: true
   }],
-  entryComponents: [OrderDetailDialogComponent, /*OrderDetailAdminDialogComponent,*/ addCommentDialogComponent]
+  entryComponents: [OrderDetailDialogComponent, addCommentDialogComponent]
 })
 
 export class AdminModule {

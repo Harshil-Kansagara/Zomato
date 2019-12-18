@@ -61,7 +61,6 @@ namespace Zomato.Core.Controllers
                         orderNotification.OrderId = order.OrderId;
                         orderNotification.RestaurantName = restaurantName;
                         await _orderHub.Clients.Client(each.ConnectionId).SendAsync("OrderReceived", orderNotification);
-                        break;
                     }
                 }
 
@@ -82,6 +81,7 @@ namespace Zomato.Core.Controllers
             orderDetail.TotalAmount = 0;
             order = await _unitOfWork.OrderRepository.GetOrderDataByOrderId(orderId);
             IdentityUser user = await _unitOfWork.UserRepository.GetUserDetail(order.UserId);
+            orderDetail.UserId = order.UserId;
             List<OrderedItem> orderedItem = await _unitOfWork.OrderedItemRepository.GetOrderedItemByOrderId(order.OrderId);
 
             for (int i = 0; i < orderedItem.Count; i++)

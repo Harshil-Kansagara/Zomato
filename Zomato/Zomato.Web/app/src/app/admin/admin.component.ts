@@ -30,7 +30,7 @@ export class AdminComponent implements OnInit, OnDestroy {
 
   constructor(private router: Router, private http: HttpClient, private orderService: OrderService,
               private orderNotificationService: OrderNotificationService, public dialog: MatDialog,
-              private _ngZone: NgZone, private toastr: ToastrService) {
+    private _ngZone: NgZone, private toastr: ToastrService) {
     this.subscribeToEvents();
   }
 
@@ -81,6 +81,8 @@ export class AdminComponent implements OnInit, OnDestroy {
       res => {
         if (res != null) {
           this.orderDetail = res as OrderDetail;
+          console.log("Order Detail:");
+          console.log(this.orderDetail);
           for (let each of this.orderDetail.itemDetail) {
             this.itemCount = this.itemCount + each.itemQuantity;
           }
@@ -91,14 +93,20 @@ export class AdminComponent implements OnInit, OnDestroy {
               DeliveryLocation: this.orderDetail['deliveryLocation'], ItemDetail: this.orderDetail['itemDetail'], TotalAmount: this.orderDetail['totalAmount']
             }
           });
+          dialogRef.afterClosed().subscribe(result => {
+            if (result == "closed") {
+                let element = this.orders.find(x => x.orderId == orderId);
+                console.log("Index Of:" + this.orders.indexOf(element));
+                this.orders.splice(this.orders.indexOf(element), 1);
+              this.notificationCount = this.orders.length;
+              this.orderNotificationService.sendDeliveryNotification(this.orderDetail['userId']);
+            }
+          });
         } //setTimeout(() => { this.display = "Delivered Succefully" }, 8000)
       }, err => {
         console.log(err);
     });
-    //let element = this.orders.find(x => x.orderId == orderId);
-    //console.log("Index Of:" + this.orders.indexOf(element));
-    //this.orders = this.orders.splice(this.orders.indexOf(element)+1,1);
-    //this.notificationCount = this.orders.length;
+   
   }
 }
 
@@ -113,7 +121,7 @@ export class OrderDetailAdminDialogComponent {
   }
 
   closeClick(): void {
-    this.dialogRef.close();
+    this.dialogRef.close("closed");
   }
 
 }

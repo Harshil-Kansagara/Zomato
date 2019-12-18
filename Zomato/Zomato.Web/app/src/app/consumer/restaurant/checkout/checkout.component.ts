@@ -33,7 +33,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
   constructor(private menuService: MenuService, private router: Router, private toastr: ToastrService,
     private cartService: CartService, public userAddressService: UserAddressService,
-    public dialog: MatDialog, private orderService: OrderService, private orderNotificationService: OrderNotificationService) {
+    public dialog: MatDialog, private orderService: OrderService) {
 
     this.restaurantName = this.router.url.split('/')[2];
   }

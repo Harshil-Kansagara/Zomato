@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Zomato.DomainModel.Models;
 using Zomato.Repository.UnitofWork;
 
-namespace Zomato.Repository.NotificationRepository
+namespace Zomato.Core.Controllers
 {
     public class OrderHub : Hub
     {
@@ -19,8 +19,16 @@ namespace Zomato.Repository.NotificationRepository
             _unitOfWork = unitOfWork;
         }
 
-        public async Task NewOrder(OrderedData order)
+        public async Task DeliveryOrder(string userId)
         {
+            var connectionList = await _unitOfWork.OrderNotificationRepository.GetConnectionList();
+            foreach (var each in connectionList)
+            {
+                if(each.UserId == userId)
+                {
+                    await Clients.Client(each.ConnectionId).SendAsync("DeliverySuccessful", "Delivered Order");
+                }
+            }
             //var connectionId = _connections.GetConnections("4aa56cd4-3ac4-4be0-af99-5933372d8a22");
             //foreach (var id in _connections.GetConnections("4aa56cd4-3ac4-4be0-af99-5933372d8a22"))
             //{

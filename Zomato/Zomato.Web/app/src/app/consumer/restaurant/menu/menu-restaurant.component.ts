@@ -61,7 +61,6 @@ export class MenuComponent implements OnInit, OnDestroy {
               this.menus.push(menu);
             }
           }
-          //console.log(this.menuList);
         }
       }, err => {
         console.log(err);

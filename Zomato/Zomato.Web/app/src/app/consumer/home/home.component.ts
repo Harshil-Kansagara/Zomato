@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, NgZone } from '@angular/core';
 import { Router } from '@angular/router';
 import { AccountService } from '../../service/account.service';
 import { ToastrService } from 'ngx-toastr';
@@ -11,6 +11,7 @@ import { startWith, map } from 'rxjs/operators';
 import { FormControl } from '@angular/forms';
 import { HubConnection } from '@aspnet/signalr';
 import * as signalR from '@aspnet/signalr';
+import { OrderNotificationService } from '../../service/order-notification.service';
 
 @Component({
   templateUrl: './home.component.html',
@@ -29,8 +30,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   filteredRestaurants: Observable<any[]>;
 
   constructor(private toastr: ToastrService, private accountService: AccountService,
-    private restaurantService: RestaurantService, private router: Router) {
+    private restaurantService: RestaurantService, private router: Router, private _ngZone: NgZone,
+    private orderNotificationService: OrderNotificationService, ) {
     this.restaurantCtrl = new FormControl();
+    this.subscribeToEvents();
   }
 
   ngOnInit() {
@@ -168,6 +171,14 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   navigateUserProfile(): void {
     this.router.navigateByUrl("users/" + this.userName);
+  }
+
+  private subscribeToEvents(): void {
+    this.orderNotificationService.deliveryReceived.subscribe((data: string) => {
+      this._ngZone.run(() => {
+        this.toastr.success(data);
+      });
+    });
   }
 
   //hyphenateUrlParams(str: string) {

@@ -35,9 +35,10 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Zomato.DomainModel.Models;
-using Zomato.Repository.NotificationRepository;
 using Microsoft.AspNetCore.SignalR;
 using Zomato.Repository;
+using Zomato.Core.Controllers;
+using Zomato.Repository.NotificationRepository;
 
 namespace Zomato.Web
 {

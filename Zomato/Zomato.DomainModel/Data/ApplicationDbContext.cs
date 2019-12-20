@@ -30,5 +30,6 @@ namespace Zomato.DomainModel.Data
         public DbSet<Review> Review { get; set; }
         public DbSet<UserAddress> UserAddress { get; set; }
         public DbSet<NotificationHub> NotificationHub { get; set; }
+        public DbSet<OrderNotificationData> OrderNotificationData { get; set; }
     }
 }

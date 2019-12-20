@@ -59,5 +59,17 @@ namespace Zomato.Repository.OrderRepository
         {
             return await _db.Order.Where(x => x.UserId == userId).OrderByDescending(x=>x.OrderDate).ToListAsync();
         }
+
+        public async Task<int> GetRestaurantIdByOrderId(int orderId)
+        {
+            var a = await _db.Order.Where(x => x.OrderId == orderId).FirstAsync();
+            return a.RestaurantId;
+        }
+
+        public async Task<string> GetUserIdByOrderId(int orderId)
+        {
+            var a = await _db.Order.Where(x => x.OrderId == orderId).FirstAsync();
+            return a.UserId;
+        }
     }
 }

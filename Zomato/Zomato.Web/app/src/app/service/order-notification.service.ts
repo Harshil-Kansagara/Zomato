@@ -5,11 +5,10 @@ import { ToastrService } from 'ngx-toastr';
 
 Injectable({ providedIn: "root" })
 export class OrderNotificationService {
+
   orderReceived = new EventEmitter<Order>();
   deliveryReceived = new EventEmitter<string>();
-
   token: string;
-
   connectionEstablished = new EventEmitter<Boolean>();
   private connectionIsEstablished = false;
   private _hubConnection: HubConnection;
@@ -21,8 +20,12 @@ export class OrderNotificationService {
     this.registerOnServerEvents();
   }
 
-  sendDeliveryNotification(userId:string) {
-    this._hubConnection.invoke('DeliveryOrder', userId);
+  sendAdminOnlineNotification(a: boolean) {
+    this._hubConnection.invoke('AdminNotification', a);
+  }
+
+  sendDeliveryNotification(orderId:number) {
+    this._hubConnection.invoke('DeliveryOrder', orderId);
   }
 
   public createConnection() {

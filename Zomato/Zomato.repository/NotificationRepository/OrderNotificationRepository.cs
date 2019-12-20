@@ -23,15 +23,36 @@ namespace Zomato.Repository.NotificationRepository
             await _db.NotificationHub.AddAsync(notificationHub);
         }
 
+        public async Task AddOrderDataForNotification(OrderNotificationData orderNotificationData)
+        {
+            await _db.OrderNotificationData.AddAsync(orderNotificationData);
+        }
+
         public async Task<List<NotificationHub>> GetConnectionList()
         {
             return await _db.NotificationHub.ToListAsync();
         }
 
+        public async Task<List<OrderNotificationData>> GetOrderNotification()
+        {
+            return await _db.OrderNotificationData.ToListAsync();
+        }
+
         public async Task RemoveConnectionId(NotificationHub notificationHub)
         {
             var connectionList = await _db.NotificationHub.Where(x => x.UserId == notificationHub.UserId && x.ConnectionId == notificationHub.ConnectionId).FirstAsync();
-            _db.NotificationHub.Remove(connectionList);
+            if(connectionList != null) { 
+                _db.NotificationHub.Remove(connectionList);
+            }
+        }
+
+        public async Task RemoveOrderNotificationData(int orderId)
+        {
+            var order = await _db.OrderNotificationData.Where(x => x.OrderId == orderId).FirstAsync();
+            if (order != null)
+            {
+                _db.OrderNotificationData.Remove(order);
+            }
         }
     }
 }

@@ -30,15 +30,12 @@ using Zomato.Repository.OrderRepository;
 using Zomato.Repository.RestaurantRepository;
 using Zomato.Repository.RestCategoryRepository;
 using Zomato.Repository.RestaurantLocationRepository;
-using System.Reflection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Zomato.DomainModel.Models;
-using Microsoft.AspNetCore.SignalR;
-using Zomato.Repository;
-using Zomato.Core.Controllers;
 using Zomato.Repository.NotificationRepository;
+using Zomato.Core.Hubs;
 
 namespace Zomato.Web
 {
@@ -171,7 +168,6 @@ namespace Zomato.Web
             app.UseSignalR(routes =>
             {
                 routes.MapHub<OrderHub>("/OrderHub");
-                //routes.MapHub<NotifyHub>("/notify");
             });
 
             app.UseMvc();

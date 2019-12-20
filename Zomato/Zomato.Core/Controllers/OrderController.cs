@@ -6,8 +6,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using Zomato.Core.Hubs;
 using Zomato.DomainModel.Models;
-using Zomato.Repository.NotificationRepository;
 using Zomato.Repository.UnitofWork;
 
 namespace Zomato.Core.Controllers
@@ -63,7 +63,11 @@ namespace Zomato.Core.Controllers
                         await _orderHub.Clients.Client(each.ConnectionId).SendAsync("OrderReceived", orderNotification);
                     }
                 }
-
+                OrderNotificationData orderNotificationData = new OrderNotificationData();
+                orderNotificationData.OrderId = order.OrderId;
+                await _unitOfWork.OrderNotificationRepository.AddOrderDataForNotification(orderNotificationData);
+                _unitOfWork.commit();
+               
                  return Ok(order);
                 
             }
@@ -81,7 +85,6 @@ namespace Zomato.Core.Controllers
             orderDetail.TotalAmount = 0;
             order = await _unitOfWork.OrderRepository.GetOrderDataByOrderId(orderId);
             IdentityUser user = await _unitOfWork.UserRepository.GetUserDetail(order.UserId);
-            orderDetail.UserId = order.UserId;
             List<OrderedItem> orderedItem = await _unitOfWork.OrderedItemRepository.GetOrderedItemByOrderId(order.OrderId);
 
             for (int i = 0; i < orderedItem.Count; i++)

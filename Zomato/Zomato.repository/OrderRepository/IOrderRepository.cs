@@ -14,5 +14,7 @@ namespace Zomato.Repository.OrderRepository
         Task DeleteOrder(int orderId);
         Task<List<Order>> GetOrdersByUserId(string userId);
         Task DeleteOrderByRestaurant(int restaurantId);
+        Task<int> GetRestaurantIdByOrderId(int orderId);
+        Task<string> GetUserIdByOrderId(int orderId);
     }
 }

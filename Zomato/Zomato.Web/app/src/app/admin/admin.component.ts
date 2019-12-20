@@ -32,6 +32,7 @@ export class AdminComponent implements OnInit, OnDestroy {
               private orderNotificationService: OrderNotificationService, public dialog: MatDialog,
     private _ngZone: NgZone, private toastr: ToastrService) {
     this.subscribeToEvents();
+    this.orderNotificationService.sendAdminOnlineNotification(true);
   }
 
   ngOnInit(): void {
@@ -99,7 +100,7 @@ export class AdminComponent implements OnInit, OnDestroy {
                 console.log("Index Of:" + this.orders.indexOf(element));
                 this.orders.splice(this.orders.indexOf(element), 1);
               this.notificationCount = this.orders.length;
-              this.orderNotificationService.sendDeliveryNotification(this.orderDetail['userId']);
+              this.orderNotificationService.sendDeliveryNotification(this.orderDetail['orderId']);
             }
           });
         } //setTimeout(() => { this.display = "Delivered Succefully" }, 8000)

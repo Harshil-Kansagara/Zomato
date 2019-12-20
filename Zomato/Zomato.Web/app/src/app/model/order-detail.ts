@@ -5,7 +5,6 @@ export class OrderDetail {
   Date: string = null;
   RestaurantName: string = null;
   UserName: string = null;
-  UserId: string = null;
   UserNumber: string = null;
   UserEmail: string = null;
   DeliveryLocation: string = null;

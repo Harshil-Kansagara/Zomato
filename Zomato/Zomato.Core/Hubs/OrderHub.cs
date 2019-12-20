@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Zomato.DomainModel.Models;
 using Zomato.Repository.UnitofWork;
 
-namespace Zomato.Core.Controllers
+namespace Zomato.Core.Hubs
 {
     public class OrderHub : Hub
     {
@@ -19,22 +19,42 @@ namespace Zomato.Core.Controllers
             _unitOfWork = unitOfWork;
         }
 
-        public async Task DeliveryOrder(string userId)
+        public async Task AdminNotification(bool a)
         {
+            if (a) {
+                var orderNotificationList = await _unitOfWork.OrderNotificationRepository.GetOrderNotification();
+                var connectionList = await _unitOfWork.OrderNotificationRepository.GetConnectionList();
+                foreach (var each in connectionList)
+                {
+                    if (each.UserId == "4aa56cd4-3ac4-4be0-af99-5933372d8a22")
+                    {
+                        foreach (var each1 in orderNotificationList)
+                        {
+                            var restaurantName = await _unitOfWork.RestaurantRepository.GetRestaurantNameById(await _unitOfWork.OrderRepository.GetRestaurantIdByOrderId(each1.OrderId));
+                            OrderNotification orderNotification = new OrderNotification();
+                            orderNotification.OrderId = each1.OrderId;
+                            orderNotification.RestaurantName = restaurantName;
+                            await Clients.Client(each.ConnectionId).SendAsync("OrderReceived", orderNotification);
+                        }
+                        
+                    }
+                }
+            }
+        }
+
+        public async Task DeliveryOrder(int orderId)
+        {
+            var userId = await _unitOfWork.OrderRepository.GetUserIdByOrderId(orderId);
             var connectionList = await _unitOfWork.OrderNotificationRepository.GetConnectionList();
             foreach (var each in connectionList)
             {
                 if(each.UserId == userId)
                 {
+                    await _unitOfWork.OrderNotificationRepository.RemoveOrderNotificationData(orderId);
+                    _unitOfWork.commit();
                     await Clients.Client(each.ConnectionId).SendAsync("DeliverySuccessful", "Delivered Order");
                 }
             }
-            //var connectionId = _connections.GetConnections("4aa56cd4-3ac4-4be0-af99-5933372d8a22");
-            //foreach (var id in _connections.GetConnections("4aa56cd4-3ac4-4be0-af99-5933372d8a22"))
-            //{
-            //    await Clients.Client(id).SendAsync("OrderReceived", order);
-            //}
-            //await Clients.Client(connectionId.ToString()).SendAsync("OrderReceived", order);
         }
 
         public override async Task OnConnectedAsync()
@@ -47,7 +67,6 @@ namespace Zomato.Core.Controllers
                 await _unitOfWork.OrderNotificationRepository.AddConnectionId(notificationHub);
                 _unitOfWork.commit();
             }
-           // return base.OnConnectedAsync();
         }
 
         public override async Task OnDisconnectedAsync(Exception exception)
@@ -60,17 +79,8 @@ namespace Zomato.Core.Controllers
                 await _unitOfWork.OrderNotificationRepository.RemoveConnectionId(notificationHub); 
                 _unitOfWork.commit();
             }
-           // return base.OnDisconnectedAsync(exception);
         }
 
         
     }
 }
-//var userId = Context.User.Identity.Name;
-//if (Context.User.Identity.Name != null) { 
-//_connections.Add(Context.User.Identity.Name, Context.ConnectionId);
-//}
-
-//if(Context.User.Identity.Name != null) { 
-//_connections.Remove(Context.User.Identity.Name, Context.ConnectionId);
-//}

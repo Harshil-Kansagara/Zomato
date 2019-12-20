@@ -11,6 +11,8 @@ namespace Zomato.Repository.NotificationRepository
         Task AddConnectionId(NotificationHub notificationHub);
         Task RemoveConnectionId(NotificationHub notificationHub);
         Task<List<NotificationHub>> GetConnectionList();
-
+        Task AddOrderDataForNotification(OrderNotificationData orderNotificationData);
+        Task<List<OrderNotificationData>> GetOrderNotification();
+        Task RemoveOrderNotificationData(int orderId);
     }
 }

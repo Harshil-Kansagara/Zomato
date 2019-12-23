@@ -6,36 +6,37 @@ using System.Text;
 using System.Threading.Tasks;
 using Zomato.DomainModel.Data;
 using Zomato.DomainModel.Models;
+using Zomato.Repository.DataRepository;
 
 namespace Zomato.Repository.OrderedItemRepository
 {
     public class OrderedItemRepository : IOrderedItemRepository
     {
-        private ApplicationDbContext _db;
+        private IDataRepository _dataRepository;
 
-        public OrderedItemRepository(ApplicationDbContext db)
+        public OrderedItemRepository(IDataRepository dataRepository)
         {
-            _db = db;
+            _dataRepository = dataRepository;
         }
 
         public async Task<OrderedItem> AddOrderedItem(OrderedItem orderedItem)
         {
-            await _db.OrderedItem.AddAsync(orderedItem);
+            await _dataRepository.AddAsync(orderedItem);
             return orderedItem;
         }
 
         public async Task DeleteOrderItem(int orderId)
         {
-            var orderItem = await _db.OrderedItem.Where(x => x.OrderId == orderId).ToListAsync();
+            var orderItem = await _dataRepository.Where<OrderedItem>(x => x.OrderId == orderId).ToListAsync();
             foreach(var each in orderItem)
             {
-                _db.OrderedItem.Remove(each);
+                _dataRepository.Remove(each);
             }
         }
 
         public async Task<List<OrderedItem>> GetOrderedItemByOrderId(int orderId)
         {
-            return await _db.OrderedItem.Where(x => x.OrderId == orderId).ToListAsync();
+            return await _dataRepository.Where<OrderedItem>(x => x.OrderId == orderId).ToListAsync();
             
         }
     }

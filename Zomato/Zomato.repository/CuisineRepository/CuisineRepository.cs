@@ -6,26 +6,27 @@ using System.Text;
 using System.Threading.Tasks;
 using Zomato.DomainModel.Data;
 using Zomato.DomainModel.Models;
+using Zomato.Repository.DataRepository;
 
 namespace Zomato.Repository.CuisineRepository
 {
     public class CuisineRepository : ICuisineRepository
     {
-        private readonly ApplicationDbContext _db;
+        private IDataRepository _dataRepository;
 
-        public CuisineRepository(ApplicationDbContext db)
+        public CuisineRepository(IDataRepository dataRepository)
         {
-            _db = db;
+            _dataRepository = dataRepository;
         }
 
         public async Task<List<Cuisine>> CuisineList()
         {
-            return await _db.Cuisine.ToListAsync();
+            return await _dataRepository.Get<Cuisine>();
         }
 
         public async Task<Cuisine> GetCuisineById(int cuisineId)
         {
-            return await _db.Cuisine.Where(x => x.CuisineId == cuisineId).FirstAsync();
+            return await _dataRepository.Where<Cuisine>(x => x.CuisineId == cuisineId).FirstAsync();
             //return cuisine.CuisineName;
         }
     }

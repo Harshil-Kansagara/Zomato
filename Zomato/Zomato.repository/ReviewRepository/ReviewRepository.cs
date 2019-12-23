@@ -6,41 +6,42 @@ using System.Text;
 using System.Threading.Tasks;
 using Zomato.DomainModel.Data;
 using Zomato.DomainModel.Models;
+using Zomato.Repository.DataRepository;
 
 namespace Zomato.Repository.ReviewRepository
 {
     public class ReviewRepository : IReviewRepository
     {
-        private ApplicationDbContext _db;
+        private IDataRepository _dataRepository;
 
-        public ReviewRepository(ApplicationDbContext db)
+        public ReviewRepository(IDataRepository dataRepository)
         {
-            _db = db;
+            _dataRepository = dataRepository;
         }
 
         public async Task<Review> AddReview(Review newReview)
         {
-            await _db.Review.AddAsync(newReview);
+            await _dataRepository.AddAsync(newReview);
             return newReview;
         }
 
         public async Task DeleteReview(int reviewId)
         {
-            var review = await _db.Review.FindAsync(reviewId);
+            var review = await _dataRepository.Find<Review>(reviewId);
             if (review != null)
             {
-                _db.Review.Remove(review);
+                _dataRepository.Remove(review);
             }
         }
 
         public async Task<List<Review>> GetReviewByRestaurantId(int restaurantId)
         {
-            return await _db.Review.Where(x => x.RestaurantId == restaurantId).ToListAsync();
+            return await _dataRepository.Where<Review>(x => x.RestaurantId == restaurantId).ToListAsync();
         }
 
         public async Task<List<Review>> GetReviewByUserId(string userId)
         {
-            return await _db.Review.Where(x => x.UserId == userId).ToListAsync();
+            return await _dataRepository.Where<Review>(x => x.UserId == userId).ToListAsync();
         }
     }
 }

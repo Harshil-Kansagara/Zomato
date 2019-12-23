@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Zomato.DomainModel.Data;
 using Zomato.DomainModel.Models;
+using Zomato.Repository.DataRepository;
 
 namespace Zomato.Repository.UserRepository
 {
@@ -16,12 +17,14 @@ namespace Zomato.Repository.UserRepository
         private readonly ApplicationDbContext _db;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
+        private IDataRepository _dataRepository;
 
-        public UserRepository(ApplicationDbContext db, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager) //RoleManager<IdentityRole> roleManager)
+        public UserRepository(ApplicationDbContext db, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, IDataRepository dataRepository) 
         {
             _db = db;
             _userManager = userManager;
             _signInManager = signInManager;
+            _dataRepository = dataRepository;
         }
 
         public async Task<IdentityResult> AddUserToRole(IdentityUser user, string roleName)

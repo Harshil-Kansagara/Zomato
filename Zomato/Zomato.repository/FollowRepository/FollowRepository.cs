@@ -6,46 +6,47 @@ using System.Text;
 using System.Threading.Tasks;
 using Zomato.DomainModel.Data;
 using Zomato.DomainModel.Models;
+using Zomato.Repository.DataRepository;
 
 namespace Zomato.Repository.FollowRepository
 {
     public class FollowRepository : IFollowRepository
     {
-        private ApplicationDbContext _db;
+        private IDataRepository _dataRepository;
 
-        public FollowRepository(ApplicationDbContext db)
+        public FollowRepository(IDataRepository dataRepository)
         {
-            _db = db;
+            _dataRepository = dataRepository;
         }
 
         public async Task<Follow> AddFollower(Follow follow)
         {
-            await _db.Follow.AddAsync(follow);
+            await _dataRepository.AddAsync<Follow>(follow);
             return follow;
         }
 
         public async Task<List<Follow>> GetFollowingByUserId(string userId)
         {
-            return await _db.Follow.Where(x => x.UserId == userId).ToListAsync();
+            return await _dataRepository.Where<Follow>(x => x.UserId == userId).ToListAsync();
         }
 
         public async Task<List<Follow>> GetFollowerByUserId(string userId)
         {
             
-            return await _db.Follow.Where(x => x.FollowingId == userId).ToListAsync();
+            return await _dataRepository.Where<Follow>(x => x.FollowingId == userId).ToListAsync();
         }
 
         public async Task<List<Follow>> GetFollowList()
         {
-            return await _db.Follow.ToListAsync();
+            return await _dataRepository.Get<Follow>();
         }
 
         public async Task RemoveFollower(string followerId)
         {
-            var follower = await _db.Follow.Where(x => x.FollowingId == followerId).FirstAsync();
+            var follower = await _dataRepository.Where<Follow>(x => x.FollowingId == followerId).FirstAsync();
             if (follower != null)
             {
-                _db.Follow.Remove(follower);
+                _dataRepository.Remove(follower);
             }
         }
     }

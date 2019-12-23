@@ -6,27 +6,28 @@ using System.Text;
 using System.Threading.Tasks;
 using Zomato.DomainModel.Data;
 using Zomato.DomainModel.Models;
+using Zomato.Repository.DataRepository;
 
 namespace Zomato.Repository.RestaurantLocationRepository
 {
     public class RestLocationRepository : IRestLocationRepository
     {
-        private readonly ApplicationDbContext _db;
+        private IDataRepository _dataRepository;
 
-        public RestLocationRepository(ApplicationDbContext db)
+        public RestLocationRepository(IDataRepository dataRepository)
         {
-            _db = db;
+            _dataRepository = dataRepository;
         }
 
         public async Task<RestaurantLocation> AddRestLocation(RestaurantLocation restaurantLocation)
         {
-            await _db.RestaurantLocation.AddAsync(restaurantLocation);
+            await _dataRepository.AddAsync(restaurantLocation);
             return restaurantLocation;
         }
 
         public async Task<List<RestaurantLocation>> GetRestLocationById(int restaurantId)
         {
-            return await _db.RestaurantLocation.Where(x => x.RestaurantId == restaurantId).ToListAsync();
+            return await _dataRepository.Where<RestaurantLocation>(x => x.RestaurantId == restaurantId).ToListAsync();
         }
     }
 }

@@ -36,6 +36,7 @@ using System.Text;
 using Zomato.DomainModel.Models;
 using Zomato.Repository.NotificationRepository;
 using Zomato.Core.Hubs;
+using Zomato.Repository.DataRepository;
 
 namespace Zomato.Web
 {
@@ -78,6 +79,7 @@ namespace Zomato.Web
             services.AddScoped<IUserAddressRepository, UserAddressRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IOrderNotificationRepository, OrderNotificationRepository>();
+            services.AddScoped<IDataRepository, DataRepository>();
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(

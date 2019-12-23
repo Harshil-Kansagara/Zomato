@@ -6,32 +6,33 @@ using System.Text;
 using System.Threading.Tasks;
 using Zomato.DomainModel.Data;
 using Zomato.DomainModel.Models;
+using Zomato.Repository.DataRepository;
 
 namespace Zomato.Repository.RestCategoryRepository
 {
     public class RestCategoryRepository : IRestCategoryRepository
     {
-        private readonly ApplicationDbContext _db;
+        private IDataRepository _dataRepository;
 
-        public RestCategoryRepository(ApplicationDbContext db)
+        public RestCategoryRepository( IDataRepository dataRepository)
         {
-            _db = db;
+            _dataRepository = dataRepository;
         }
 
         public async Task<RestCategory> AddRestCategory(RestCategory restCategory)
         {
-            await _db.RestCategory.AddAsync(restCategory);
+            await _dataRepository.AddAsync(restCategory);
             return restCategory;
         }
 
         public async Task<List<RestCategory>> GetRestaurantIdByCategoryId(int categoryId)
         {
-            return await _db.RestCategory.Where(x => x.CategoryId == categoryId).ToListAsync();
+            return await _dataRepository.Where<RestCategory>(x => x.CategoryId == categoryId).ToListAsync();
         }
 
         public async Task<List<RestCategory>> GetRestCategoryByRestaurantId(int restaurantId)
         {
-            return await _db.RestCategory.Where(x => x.RestaurantId == restaurantId).ToListAsync();
+            return await _dataRepository.Where<RestCategory>(x => x.RestaurantId == restaurantId).ToListAsync();
         }
     }
 }

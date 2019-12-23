@@ -6,69 +6,70 @@ using System.Text;
 using System.Threading.Tasks;
 using Zomato.DomainModel.Data;
 using Zomato.DomainModel.Models;
+using Zomato.Repository.DataRepository;
 
 namespace Zomato.Repository.OrderRepository
 {
     public class OrderRepository : IOrderRepository
     {
-        private ApplicationDbContext _db;
+        private IDataRepository _dataRepository;
 
-        public OrderRepository(ApplicationDbContext db)
+        public OrderRepository(IDataRepository dataRepository)
         {
-            this._db = db;
+            _dataRepository = dataRepository;
         }
 
         public async Task<Order> AddOrder(Order order)
         {
-            await _db.Order.AddAsync(order);
+            await _dataRepository.AddAsync(order);
             return order;
         }
 
         public async Task DeleteOrder(int orderId)
         {
-            var order = await _db.Order.FindAsync(orderId);
+            var order = await _dataRepository.Find<Order>(orderId);
             if (order != null)
             {
-                _db.Order.Remove(order);
+                _dataRepository.Remove(order);
             }
         }
 
         public async Task DeleteOrderByRestaurant(int restaurantId)
         {
-            var orderList = await _db.Order.Where(x=>x.RestaurantId == restaurantId).ToListAsync();
+            var orderList = await _dataRepository.Where<Order>(x=>x.RestaurantId == restaurantId).ToListAsync();
             if (orderList != null)
             {
                 foreach (var order in orderList)
                 {
-                    _db.Order.Remove(order);
+                    _dataRepository.Remove(order);
                 }
             }
         }
 
         public async Task<Order> GetOrderDataByOrderId(int orderId)
         {
-            return await _db.Order.FindAsync(orderId);
+            return await _dataRepository.Find<Order>(orderId);
         }
 
         public async Task<List<Order>> GetOrdersByRestaurantId(int restaurantId)
         {
-            return await _db.Order.Where(x => x.RestaurantId == restaurantId).OrderByDescending(x => x.OrderDate).ToListAsync();
+            return await _dataRepository.Where<Order>(x => x.RestaurantId == restaurantId).OrderByDescending(x => x.OrderDate).ToListAsync();
         }
 
         public async Task<List<Order>> GetOrdersByUserId(string userId)
         {
-            return await _db.Order.Where(x => x.UserId == userId).OrderByDescending(x=>x.OrderDate).ToListAsync();
+            return await _dataRepository.Where<Order>(x => x.UserId == userId).OrderByDescending(x=>x.OrderDate).ToListAsync();
         }
 
         public async Task<int> GetRestaurantIdByOrderId(int orderId)
         {
-            var a = await _db.Order.Where(x => x.OrderId == orderId).FirstAsync();
+            var a = await _dataRepository.Where<Order>(x => x.OrderId == orderId).FirstAsync();
             return a.RestaurantId;
         }
 
         public async Task<string> GetUserIdByOrderId(int orderId)
         {
-            var a = await _db.Order.Where(x => x.OrderId == orderId).FirstAsync();
+            var a = await _dataRepository.Where<Order>(x => x.OrderId == orderId).FirstAsync();
             return a.UserId;
         }
     }

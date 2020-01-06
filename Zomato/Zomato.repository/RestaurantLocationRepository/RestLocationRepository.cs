@@ -27,7 +27,12 @@ namespace Zomato.Repository.RestaurantLocationRepository
 
         public async Task<List<RestaurantLocation>> GetRestLocationById(int restaurantId)
         {
-            return await _dataRepository.Where<RestaurantLocation>(x => x.RestaurantId == restaurantId).ToListAsync();
+            var a = await _dataRepository.Where<RestaurantLocation>(x => x.RestaurantId == restaurantId).ToListAsync();
+            if(a == null)
+            {
+                return null;
+            }
+            return a;
         }
     }
 }

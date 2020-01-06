@@ -36,7 +36,8 @@ namespace Zomato.Repository.CommentRepository
 
         public async Task<List<Comment>> GetCommentByReviewId(int reviewId)
         {
-            return await _dataRepository.Where<Comment>(x => x.ReviewId == reviewId).ToListAsync();
+            var a = await _dataRepository.Where<Comment>(x => x.ReviewId == reviewId).ToListAsync();
+            return a;
         }
     }
 }

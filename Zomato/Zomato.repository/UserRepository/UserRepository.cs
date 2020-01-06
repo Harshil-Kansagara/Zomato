@@ -13,18 +13,13 @@ namespace Zomato.Repository.UserRepository
 {
     public class UserRepository : IUserRepository
     {
-
-        private readonly ApplicationDbContext _db;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
-        private IDataRepository _dataRepository;
 
-        public UserRepository(ApplicationDbContext db, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, IDataRepository dataRepository) 
+        public UserRepository( UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager) 
         {
-            _db = db;
             _userManager = userManager;
             _signInManager = signInManager;
-            _dataRepository = dataRepository;
         }
 
         public async Task<IdentityResult> AddUserToRole(IdentityUser user, string roleName)
@@ -34,40 +29,81 @@ namespace Zomato.Repository.UserRepository
 
         public async Task<IdentityUser> FindByEmail(string email)
         {
-           return await _userManager.FindByEmailAsync(email);
+           var a = await _userManager.FindByEmailAsync(email);
+            if (a == null)
+            {
+                return null;
+            }
+            return a;
         }
 
         public async Task<IdentityUser> GetUserDetail(string userId)
         {
-            return await _userManager.FindByIdAsync(userId);
+            var a = await _userManager.FindByIdAsync(userId);
+            if(a == null)
+            {
+                return null;
+            }
+            return a;
         }
 
         public async Task<List<IdentityUser>> GetUserList()
         {
-            return await _userManager.Users.ToListAsync();
+            var a = await _userManager.Users.ToListAsync();
+            if(a.Count == 0)
+            {
+                return null;
+            }
+            return a;
         }
 
         public async Task<IdentityUser> GetUsernameByUserId(string userId)
         {
-            return await _userManager.FindByIdAsync(userId);
+            var a = await _userManager.FindByIdAsync(userId);
+            if (a == null)
+            {
+                return null;
+            }
+            return a;
         }
 
         public async Task<string> GetUserRole(User user)
         {
-            var result = await _userManager.GetRolesAsync(await FindByEmail(user.UserEmailAddress));
-            return result[0];
+            var user1 = await _userManager.FindByEmailAsync(user.UserEmailAddress);
+            if(user1 == null)
+            {
+                return null;
+            }
+            else
+            { 
+                var result = await _userManager.GetRolesAsync(user1);
+                if(result == null)
+                {
+                    return null;
+                }
+                return result[0];
+            }
         }
 
         public async Task<string> getUserRole(IdentityUser user)
         {
             var result = await _userManager.GetRolesAsync(user);
+            if(result == null)
+            {
+                return null;
+            }
             return result[0];
         }
 
         public async Task<SignInResult> Login(User userData)
         {
-            var user = await FindByEmail(userData.UserEmailAddress);
-            return await _signInManager.PasswordSignInAsync(user.UserName, userData.UserPassword, false, false);
+            var user = await _userManager.FindByEmailAsync(userData.UserEmailAddress);
+            var a = await _signInManager.PasswordSignInAsync(user.UserName, userData.UserPassword, false, false);
+            if(a == null)
+            {
+                return null;
+            }
+            return a;
         }
 
         public async Task<IdentityResult> RegisterUser(IdentityUser user, string password)

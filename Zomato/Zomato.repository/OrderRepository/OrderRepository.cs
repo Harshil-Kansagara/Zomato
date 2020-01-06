@@ -48,17 +48,32 @@ namespace Zomato.Repository.OrderRepository
 
         public async Task<Order> GetOrderDataByOrderId(int orderId)
         {
-            return await _dataRepository.Find<Order>(orderId);
+            var a = await _dataRepository.Find<Order>(orderId);
+            if(a == null)
+            {
+                return null;
+            }
+            return a;
         }
 
         public async Task<List<Order>> GetOrdersByRestaurantId(int restaurantId)
         {
-            return await _dataRepository.Where<Order>(x => x.RestaurantId == restaurantId).OrderByDescending(x => x.OrderDate).ToListAsync();
+            var a = await _dataRepository.Where<Order>(x => x.RestaurantId == restaurantId).OrderByDescending(x => x.OrderDate).ToListAsync();
+            if(a.Count == 0)
+            {
+                return null;
+            }
+            return a;
         }
 
         public async Task<List<Order>> GetOrdersByUserId(string userId)
         {
-            return await _dataRepository.Where<Order>(x => x.UserId == userId).OrderByDescending(x=>x.OrderDate).ToListAsync();
+            var a = await _dataRepository.Where<Order>(x => x.UserId == userId).OrderByDescending(x=>x.OrderDate).ToListAsync();
+            if (a.Count == 0)
+            {
+                return null;
+            }
+            return a;
         }
 
         public async Task<int> GetRestaurantIdByOrderId(int orderId)

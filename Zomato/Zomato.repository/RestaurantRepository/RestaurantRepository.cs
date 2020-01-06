@@ -36,12 +36,21 @@ namespace Zomato.Repository.RestaurantRepository
 
         public async Task<Restaurant> GetRestaurantById(int restaurantId)
         {
-            return await _dataRepository.Where<Restaurant>(x => x.RestaurantId == restaurantId).FirstAsync();
+            var a = await _dataRepository.Find<Restaurant>(restaurantId);
+            if(a == null)
+            {
+                return null;
+            }
+            return a;
         }
 
         public async Task<string> GetRestaurantNameById(int restaurantId)
         {
             var restaurant = await _dataRepository.Find<Restaurant>(restaurantId);
+            if(restaurant == null)
+            {
+                return null;
+            }
             return restaurant.RestaurantName;
         }
 

@@ -27,12 +27,22 @@ namespace Zomato.Repository.RestCategoryRepository
 
         public async Task<List<RestCategory>> GetRestaurantIdByCategoryId(int categoryId)
         {
-            return await _dataRepository.Where<RestCategory>(x => x.CategoryId == categoryId).ToListAsync();
+            var a = await _dataRepository.Where<RestCategory>(x => x.CategoryId == categoryId).ToListAsync();
+            if(a.Count == 0)
+            {
+                return null;
+            }
+            return a;
         }
 
         public async Task<List<RestCategory>> GetRestCategoryByRestaurantId(int restaurantId)
         {
-            return await _dataRepository.Where<RestCategory>(x => x.RestaurantId == restaurantId).ToListAsync();
+            var a = await _dataRepository.Where<RestCategory>(x => x.RestaurantId == restaurantId).ToListAsync();
+            if(a.Count == 0)
+            {
+                return null;
+            }
+            return a;
         }
     }
 }

@@ -20,5 +20,10 @@ namespace Zomato.DomainModel.Models
         //public Menu Menu { get; set; }
 
         public int ItemQuantity { get; set; }
+
+        public static object AsQueryable()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

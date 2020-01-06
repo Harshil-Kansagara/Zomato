@@ -27,13 +27,17 @@ namespace Zomato.Repository.FollowRepository
 
         public async Task<List<Follow>> GetFollowingByUserId(string userId)
         {
-            return await _dataRepository.Where<Follow>(x => x.UserId == userId).ToListAsync();
+            var a = await _dataRepository.Where<Follow>(x => x.UserId == userId).ToListAsync();
+           
+            return a;
         }
 
         public async Task<List<Follow>> GetFollowerByUserId(string userId)
         {
             
-            return await _dataRepository.Where<Follow>(x => x.FollowingId == userId).ToListAsync();
+            var a = await _dataRepository.Where<Follow>(x => x.FollowingId == userId).ToListAsync();
+            
+            return a;
         }
 
         public async Task<List<Follow>> GetFollowList()
@@ -43,10 +47,13 @@ namespace Zomato.Repository.FollowRepository
 
         public async Task RemoveFollower(string followerId)
         {
-            var follower = await _dataRepository.Where<Follow>(x => x.FollowingId == followerId).FirstAsync();
-            if (follower != null)
+            var followerList = await _dataRepository.Where<Follow>(x => x.FollowingId == followerId).ToListAsync();
+            if (followerList != null)
             {
-                _dataRepository.Remove(follower);
+                foreach (var each in followerList)
+                {
+                    _dataRepository.Remove(each);
+                }
             }
         }
     }

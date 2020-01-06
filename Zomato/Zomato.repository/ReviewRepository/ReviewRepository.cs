@@ -36,12 +36,22 @@ namespace Zomato.Repository.ReviewRepository
 
         public async Task<List<Review>> GetReviewByRestaurantId(int restaurantId)
         {
-            return await _dataRepository.Where<Review>(x => x.RestaurantId == restaurantId).ToListAsync();
+            var a = await _dataRepository.Where<Review>(x => x.RestaurantId == restaurantId).ToListAsync();
+            if(a.Count == 0)
+            {
+                return null;
+            }
+            return a;
         }
 
         public async Task<List<Review>> GetReviewByUserId(string userId)
         {
-            return await _dataRepository.Where<Review>(x => x.UserId == userId).ToListAsync();
+            var a = await _dataRepository.Where<Review>(x => x.UserId == userId).ToListAsync();
+            if(a.Count == 0)
+            {
+                return null;
+            }
+            return a;
         }
     }
 }

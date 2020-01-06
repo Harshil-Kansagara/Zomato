@@ -36,7 +36,12 @@ namespace Zomato.Repository.OrderedItemRepository
 
         public async Task<List<OrderedItem>> GetOrderedItemByOrderId(int orderId)
         {
-            return await _dataRepository.Where<OrderedItem>(x => x.OrderId == orderId).ToListAsync();
+            var a =  await _dataRepository.Where<OrderedItem>(x => x.OrderId == orderId).ToListAsync();
+            if(a.Count == 0)
+            {
+                return null;
+            }
+            return a;
             
         }
     }

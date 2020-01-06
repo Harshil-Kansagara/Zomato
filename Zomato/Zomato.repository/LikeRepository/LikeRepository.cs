@@ -45,7 +45,8 @@ namespace Zomato.Repository.LikeRepository
 
         public async Task<List<Like>> GetLikeByReviewId(int reviewId)
         {
-            return await _dataRepository.Where<Like>(x => x.ReviewId == reviewId).ToListAsync();
+           var a = await _dataRepository.Where<Like>(x => x.ReviewId == reviewId).ToListAsync();
+            return a;
         }
     }
 }

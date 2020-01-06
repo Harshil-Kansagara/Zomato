@@ -46,12 +46,21 @@ namespace Zomato.Repository.UserAddressRepository
 
         public async Task<List<UserAddress>> GetAddressList(string userId)
         {
-            return await _dataRepository.Where<UserAddress>(x => x.UserId == userId).ToListAsync();
+            var a = await _dataRepository.Where<UserAddress>(x => x.UserId == userId).ToListAsync();
+            if(a.Count == 0)
+            {
+                return null;
+            }
+            return a;
         }
 
         public async Task<string> GetAddressNameById(int addressId)
         {
             var address = await _dataRepository.Find<UserAddress>(addressId);
+            if(address == null)
+            {
+                return null;
+            }
             return address.Address;
         }
     }

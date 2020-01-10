@@ -11,7 +11,6 @@ C:\Users\harshilkansagara\source\repos\Zomato\Zomato\Zomato.Repository.Test\bin\
 C:\Users\harshilkansagara\source\repos\Zomato\Zomato\Zomato.Repository.Test\bin\Debug\netcoreapp2.2\Zomato.Repository.pdb
 C:\Users\harshilkansagara\source\repos\Zomato\Zomato\Zomato.Repository.Test\bin\Debug\netcoreapp2.2\Zomato.DomainModel.pdb
 C:\Users\harshilkansagara\source\repos\Zomato\Zomato\Zomato.Repository.Test\obj\Debug\netcoreapp2.2\Zomato.Repository.Test.csprojAssemblyReference.cache
-C:\Users\harshilkansagara\source\repos\Zomato\Zomato\Zomato.Repository.Test\obj\Debug\netcoreapp2.2\Zomato.Repository.Test.csproj.CoreCompileInputs.cache
 C:\Users\harshilkansagara\source\repos\Zomato\Zomato\Zomato.Repository.Test\obj\Debug\netcoreapp2.2\Zomato.Repository.Test.AssemblyInfoInputs.cache
 C:\Users\harshilkansagara\source\repos\Zomato\Zomato\Zomato.Repository.Test\obj\Debug\netcoreapp2.2\Zomato.Repository.Test.AssemblyInfo.cs
 C:\Users\harshilkansagara\source\repos\Zomato\Zomato\Zomato.Repository.Test\obj\Debug\netcoreapp2.2\Zomato.Repository.Test.csproj.CopyComplete
